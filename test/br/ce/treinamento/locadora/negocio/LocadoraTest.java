@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import org.junit.Assert;
+import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -106,6 +107,8 @@ public class LocadoraTest {
 	
 	@Test
 	public void deveAdicionarUmDiaNaEntregaAoAlugar4Filmes() throws LocadoraException {
+		Assume.assumeFalse(Calendar.getInstance().get(Calendar.DAY_OF_WEEK) == Calendar.FRIDAY);
+		
 		//Cenario
 		Filme filme1 = new Filme("Iron Man", 2, 4.0);
 		Filme filme2 = new Filme("Capitao America", 1, 3.0);
@@ -126,6 +129,8 @@ public class LocadoraTest {
 	
 	@Test
 	public void deveEntregarFilmeNaSegundaAoAlugar4FilmesNaSexta() throws LocadoraException {
+		Assume.assumeTrue(Calendar.getInstance().get(Calendar.DAY_OF_WEEK) == Calendar.FRIDAY);
+		
 		//Cenario
 		Filme filme1 = new Filme("Iron Man", 2, 4.0);
 		Filme filme2 = new Filme("Capitao America", 1, 3.0);
@@ -146,6 +151,8 @@ public class LocadoraTest {
 	
 	@Test
 	public void deveDar25PercDescontoAoAlugar4FilmesNaSegunda() throws LocadoraException {
+		Assume.assumeTrue(Calendar.getInstance().get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY);
+		
 		Filme filme1 = new Filme("Lord of the rings: The Fellowship of the ring", 5, 4.0);
 		Filme filme2 = new Filme("Lord of the rings: The Two Towers", 5, 4.0);
 		Filme filme3 = new Filme("Lord of the rings: The Return of the King", 5, 4.0);
@@ -159,6 +166,8 @@ public class LocadoraTest {
 	
 	@Test
 	public void deveDar50PercDescontoAoAlugar5FilmesNaSegunda() throws LocadoraException {
+		Assume.assumeTrue(Calendar.getInstance().get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY);
+		
 		Filme filme1 = new Filme("Lord of the rings: The Fellowship of the ring", 5, 4.0);
 		Filme filme2 = new Filme("Lord of the rings: The Two Towers", 5, 4.0);
 		Filme filme3 = new Filme("Lord of the rings: The Return of the King", 5, 4.0);
@@ -173,6 +182,8 @@ public class LocadoraTest {
 	
 	@Test
 	public void deveDar75PercDescontoAoAlugar6FilmesNaSegunda() throws LocadoraException {
+		Assume.assumeTrue(Calendar.getInstance().get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY);
+		
 		Filme filme1 = new Filme("Lord of the rings: The Fellowship of the ring", 5, 4.0);
 		Filme filme2 = new Filme("Lord of the rings: The Two Towers", 5, 4.0);
 		Filme filme3 = new Filme("Lord of the rings: The Return of the King", 5, 4.0);
@@ -188,6 +199,8 @@ public class LocadoraTest {
 	
 	@Test
 	public void deveDar100PercDescontoAoAlugar7FilmesNaSegunda() throws LocadoraException {
+		Assume.assumeTrue(Calendar.getInstance().get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY);
+		
 		Filme filme1 = new Filme("Lord of the rings: The Fellowship of the ring", 5, 4.0);
 		Filme filme2 = new Filme("Lord of the rings: The Two Towers", 5, 4.0);
 		Filme filme3 = new Filme("Lord of the rings: The Return of the King", 5, 4.0);
