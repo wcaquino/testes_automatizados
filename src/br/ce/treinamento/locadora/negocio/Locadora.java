@@ -1,7 +1,6 @@
 package br.ce.treinamento.locadora.negocio;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import br.ce.treinamento.locadora.entidades.Filme;
@@ -26,9 +25,26 @@ public class Locadora {
 		Locacao locacao = new Locacao();
 		locacao.setFilmes(filmes);
 		locacao.setUsuario(usuario);
-		locacao.setDataLocacao(new Date());
-		for(Filme filme: filmes)
-			locacao.setValor(locacao.getValor() + filme.getPrecoLocacao());
+		Calendar dataLocacao = Calendar.getInstance();
+		locacao.setDataLocacao(dataLocacao.getTime());
+		
+		int contador = 0;
+		for(Filme filme: filmes) {
+			contador++;
+			if(dataLocacao.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY) {
+				Double precoFilme = null;
+				switch (contador) {
+					case 4: precoFilme = filme.getPrecoLocacao() * 0.75; break;
+					case 5: precoFilme = filme.getPrecoLocacao() * 0.50; break;
+					case 6: precoFilme = filme.getPrecoLocacao() * 0.25; break;
+					case 7: precoFilme = 0d; break;
+					default: precoFilme = filme.getPrecoLocacao(); break;
+				}
+				locacao.setValor(locacao.getValor() + precoFilme);
+			} else {
+				locacao.setValor(locacao.getValor() + filme.getPrecoLocacao());
+			}
+		}
 
 		//Entrega no dia seguinte, exceto quando o dia seguinte eh domingo... nesse caso, a entrega fica para segunda
 		Calendar dataEntrega = Calendar.getInstance();
