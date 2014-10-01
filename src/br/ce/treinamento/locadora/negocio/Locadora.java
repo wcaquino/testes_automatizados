@@ -37,6 +37,9 @@ public class Locadora {
 			dataEntrega.add(Calendar.DAY_OF_MONTH, 1);
 		}
 		
+		if(filmes.size() >= 4) {
+			dataEntrega.add(Calendar.DAY_OF_MONTH, 1);
+		}
 		locacao.setDataRetorno(dataEntrega.getTime());
 		for(Filme filme: filmes) {
 			filme.setEstoque(filme.getEstoque() - 1);

@@ -1,6 +1,7 @@
 package br.ce.treinamento.locadora.negocio;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
@@ -101,5 +102,25 @@ public class LocadoraTest {
 		
 		//Acao
 		locadora.alugarFilme(usuario, filmes);
+	}
+	
+	@Test
+	public void deveAdicionarUmDiaNaEntregaAoAlugar4Filmes() throws LocadoraException {
+		//Cenario
+		Filme filme1 = new Filme("Iron Man", 2, 4.0);
+		Filme filme2 = new Filme("Capitao America", 1, 3.0);
+		Filme filme3 = new Filme("Thor", 1, 2.50);
+		Filme filme4 = new Filme("The Avengers", 10, 5.0);
+		filmes = Arrays.asList(filme1, filme2, filme3, filme4);
+		
+		Locacao locacao = locadora.alugarFilme(usuario, filmes);
+		
+		Calendar dataEsperada = Calendar.getInstance();
+		dataEsperada.add(Calendar.DAY_OF_MONTH, 2);
+		
+		Calendar dataRetorno = Calendar.getInstance();
+		dataRetorno.setTime(locacao.getDataRetorno());
+		
+		Assert.assertEquals(dataEsperada.get(Calendar.DAY_OF_MONTH), dataRetorno.get(Calendar.DAY_OF_MONTH));
 	}
 }
