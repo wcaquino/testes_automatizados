@@ -1,6 +1,8 @@
 package br.ce.treinamento.locadora.negocio;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -17,6 +19,7 @@ public class LocadoraTest {
 
 	private Locadora locadora;
 	private Usuario usuario;
+	private List<Filme> filmes;
 	
 	@Rule
 	public ExpectedException excecaoEsperada = ExpectedException.none();
@@ -25,15 +28,17 @@ public class LocadoraTest {
 	public void setup(){
 		locadora = new Locadora();
 		usuario = new Usuario("Joseh");
+		filmes = new ArrayList<Filme>();
 	}
 	
 	@Test
 	public void deveTerDataRetornoAmanhaAoAlugarFilme() throws LocadoraException{
 		//Cenario
 		Filme filme = new Filme("GodFather", 5, 5.0);
+		filmes.add(filme);
 		
 		//Acao
-		Locacao locacao = locadora.alugarFilme(usuario, filme);
+		Locacao locacao = locadora.alugarFilme(usuario, filmes);
 		
 		//Validacao
 		Calendar calendarDataRetorno = Calendar.getInstance();
@@ -49,9 +54,10 @@ public class LocadoraTest {
 	public void deveCalcularPrecoAoAlugarFilme() throws LocadoraException{
 		//Cenario
 		Filme filme = new Filme("GodFather", 5, 5.0);
+		filmes.add(filme);
 		
 		//Acao
-		Locacao locacao = locadora.alugarFilme(usuario, filme);
+		Locacao locacao = locadora.alugarFilme(usuario, filmes);
 		
 		//Validacao
 		Assert.assertEquals(5.0, locacao.getValor(), 0.001);
@@ -61,22 +67,24 @@ public class LocadoraTest {
 	public void deveReduzirEstoqueAoAlugarFilme() throws LocadoraException {
 		//Cenario
 		Filme filme = new Filme("E o tempo levou", 3, 1.50);
+		filmes.add(filme);
 		
 		//Acao
-		Locacao locacao = locadora.alugarFilme(usuario, filme);
+		Locacao locacao = locadora.alugarFilme(usuario, filmes);
 		
 		//Verificacao
-		Assert.assertEquals(2, locacao.getFilme().getEstoque().intValue());
+		Assert.assertEquals(2, locacao.getFilmes().get(0).getEstoque().intValue());
 	}
 	
 	@Test
 	public void deveLancarExcecaoQuandoAlugarFilmeComEstoqueMinimo() {
 		//Cenario
 		Filme filme = new Filme("Matrix", 0, 4.0);
+		filmes.add(filme);
 		
 		//Acao
 		try {
-			locadora.alugarFilme(usuario, filme);
+			locadora.alugarFilme(usuario, filmes);
 			
 		//Verificacao
 			Assert.fail("Uma excecao deveria ter sido lancada na linha anterior");
@@ -86,13 +94,12 @@ public class LocadoraTest {
 	}
 	
 	@Test
-	public void deveLancarExcecaoQuandoAlugarFilmeComFilmeNulo() throws LocadoraException{
+	public void deveLancarExcecaoQuandoAlugarFilmeSemFilmeDefinido() throws LocadoraException{
 		//Cenario
-		Filme filme = null;
 		excecaoEsperada.expect(LocadoraException.class);
 		excecaoEsperada.expectMessage("O Filme nao pode estar vazio");
 		
 		//Acao
-		locadora.alugarFilme(usuario, filme);
+		locadora.alugarFilme(usuario, filmes);
 	}
 }

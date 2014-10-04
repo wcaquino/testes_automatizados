@@ -1,14 +1,19 @@
 package br.ce.treinamento.locadora.entidades;
 
 import java.util.Date;
+import java.util.List;
 
 public class Locacao {
 
 	private Usuario usuario;
-	private Filme filme;
+	private List<Filme> filmes;
 	private Date dataLocacao;
 	private Date dataRetorno;
 	private Double valor;
+	
+	public Locacao() {
+		valor = 0d;
+	}
 	
 	public Usuario getUsuario() {
 		return usuario;
@@ -16,11 +21,11 @@ public class Locacao {
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
 	}
-	public Filme getFilme() {
-		return filme;
+	public List<Filme> getFilmes() {
+		return filmes;
 	}
-	public void setFilme(Filme filme) {
-		this.filme = filme;
+	public void setFilmes(List<Filme> filmes) {
+		this.filmes = filmes;
 	}
 	public Date getDataLocacao() {
 		return dataLocacao;

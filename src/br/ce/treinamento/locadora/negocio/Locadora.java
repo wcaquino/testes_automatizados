@@ -2,6 +2,7 @@ package br.ce.treinamento.locadora.negocio;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import br.ce.treinamento.locadora.entidades.Filme;
 import br.ce.treinamento.locadora.entidades.Locacao;
@@ -10,21 +11,24 @@ import br.ce.treinamento.locadora.exceptions.LocadoraException;
 
 public class Locadora {
 
-	public Locacao alugarFilme(Usuario usuario, Filme filme) throws LocadoraException {
+	public Locacao alugarFilme(Usuario usuario, List<Filme> filmes) throws LocadoraException {
 		if(usuario == null) {
 			throw new LocadoraException("O usuario nao pode estar vazio");
 		}
-		if(filme == null) {
+		if(filmes == null || filmes.isEmpty()) {
 			throw new LocadoraException("O Filme nao pode estar vazio");
 		}
-		if(filme.getEstoque() <= 0) {
-			throw new LocadoraException("Nao eh possivel alugar filme que nao estah no estoque");
+		for(Filme filme: filmes) {
+			if(filme.getEstoque() <= 0) {
+				throw new LocadoraException("Nao eh possivel alugar filme que nao estah no estoque");
+			}
 		}
 		Locacao locacao = new Locacao();
-		locacao.setFilme(filme);
+		locacao.setFilmes(filmes);
 		locacao.setUsuario(usuario);
 		locacao.setDataLocacao(new Date());
-		locacao.setValor(filme.getPrecoLocacao());
+		for(Filme filme: filmes)
+			locacao.setValor(locacao.getValor() + filme.getPrecoLocacao());
 
 		//Entrega no dia seguinte, exceto quando o dia seguinte eh domingo... nesse caso, a entrega fica para segunda
 		Calendar dataEntrega = Calendar.getInstance();
@@ -34,7 +38,9 @@ public class Locadora {
 		}
 		
 		locacao.setDataRetorno(dataEntrega.getTime());
-		filme.setEstoque(filme.getEstoque() - 1);
+		for(Filme filme: filmes) {
+			filme.setEstoque(filme.getEstoque() - 1);
+		}
 		
 		return locacao;
 	}
