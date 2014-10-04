@@ -63,4 +63,13 @@ public class LocadoraTest {
 		//Verificacao
 		Assert.assertEquals(2, locacao.getFilme().getEstoque().intValue());
 	}
+	
+	@Test(expected=LocadoraException.class)
+	public void deveLancarExcecaoQuandoAlugarFilmeComEstoqueMinimo() throws LocadoraException{
+		//Cenario
+		Filme filme = new Filme("Matrix", 0, 4.0);
+		
+		//Acao
+		locadora.alugarFilme(usuario, filme);
+	}
 }
