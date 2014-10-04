@@ -6,14 +6,10 @@ import java.util.Date;
 import br.ce.treinamento.locadora.entidades.Filme;
 import br.ce.treinamento.locadora.entidades.Locacao;
 import br.ce.treinamento.locadora.entidades.Usuario;
-import br.ce.treinamento.locadora.exception.LocadoraException;
 
 public class Locadora {
 
-	public Locacao alugarFilme(Usuario usuario, Filme filme) throws LocadoraException {
-		if(filme.getEstoque() <= 0) {
-			throw new LocadoraException();
-		}
+	public Locacao alugarFilme(Usuario usuario, Filme filme) {
 		Locacao locacao = new Locacao();
 		locacao.setFilme(filme);
 		locacao.setUsuario(usuario);
@@ -28,7 +24,6 @@ public class Locadora {
 		}
 		
 		locacao.setDataRetorno(dataEntrega.getTime());
-		filme.setEstoque(filme.getEstoque() - 1);
 		
 		return locacao;
 	}
