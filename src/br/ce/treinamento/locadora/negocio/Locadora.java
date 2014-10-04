@@ -11,6 +11,12 @@ import br.ce.treinamento.locadora.exceptions.LocadoraException;
 public class Locadora {
 
 	public Locacao alugarFilme(Usuario usuario, Filme filme) throws LocadoraException {
+		if(usuario == null) {
+			throw new LocadoraException("O usuario nao pode estar vazio");
+		}
+		if(filme == null) {
+			throw new LocadoraException("O Filme nao pode estar vazio");
+		}
 		if(filme.getEstoque() <= 0) {
 			throw new LocadoraException("Nao eh possivel alugar filme que nao estah no estoque");
 		}

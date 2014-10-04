@@ -4,7 +4,9 @@ import java.util.Calendar;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import br.ce.treinamento.locadora.entidades.Filme;
 import br.ce.treinamento.locadora.entidades.Locacao;
@@ -15,6 +17,9 @@ public class LocadoraTest {
 
 	private Locadora locadora;
 	private Usuario usuario;
+	
+	@Rule
+	public ExpectedException excecaoEsperada = ExpectedException.none();
 	
 	@Before
 	public void setup(){
@@ -64,10 +69,28 @@ public class LocadoraTest {
 		Assert.assertEquals(2, locacao.getFilme().getEstoque().intValue());
 	}
 	
-	@Test(expected=LocadoraException.class)
-	public void deveLancarExcecaoQuandoAlugarFilmeComEstoqueMinimo() throws LocadoraException{
+	@Test
+	public void deveLancarExcecaoQuandoAlugarFilmeComEstoqueMinimo() {
 		//Cenario
 		Filme filme = new Filme("Matrix", 0, 4.0);
+		
+		//Acao
+		try {
+			locadora.alugarFilme(usuario, filme);
+			
+		//Verificacao
+			Assert.fail("Uma excecao deveria ter sido lancada na linha anterior");
+		} catch (LocadoraException e) {
+			Assert.assertEquals("Nao eh possivel alugar filme que nao estah no estoque", e.getMessage());
+		}
+	}
+	
+	@Test
+	public void deveLancarExcecaoQuandoAlugarFilmeComFilmeNulo() throws LocadoraException{
+		//Cenario
+		Filme filme = null;
+		excecaoEsperada.expect(LocadoraException.class);
+		excecaoEsperada.expectMessage("O Filme nao pode estar vazio");
 		
 		//Acao
 		locadora.alugarFilme(usuario, filme);
