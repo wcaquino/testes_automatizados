@@ -159,6 +159,21 @@ public class LocadoraTest {
 		Filme filme4 = new Filme("The Hobbit: There and back again", 5, 5.0);
 		Filme filme5 = new Filme("The Hobbit: Smaug Desolation", 5, 5.0);
 		Filme filme6 = new Filme("The Hobbit: 5 exercitos", 5, 5.0);
+		filmes = Arrays.asList(filme1, filme2, filme3, filme4, filme5, filme6);
+		
+		Locacao locacao = locadora.alugarFilme(usuario, filmes);
+		
+		Assert.assertEquals(19.5, locacao.getValor(), 0.001);
+	}
+	
+	@Test
+	public void deveDar100PercDescontoAoAlugar7FilmesNaSegunda() throws LocadoraException {
+		Filme filme1 = new Filme("Lord of the rings: The Fellowship of the ring", 5, 4.0);
+		Filme filme2 = new Filme("Lord of the rings: The Two Towers", 5, 4.0);
+		Filme filme3 = new Filme("Lord of the rings: The Return of the King", 5, 4.0);
+		Filme filme4 = new Filme("The Hobbit: There and back again", 5, 5.0);
+		Filme filme5 = new Filme("The Hobbit: Smaug Desolation", 5, 5.0);
+		Filme filme6 = new Filme("The Hobbit: 5 exercitos", 5, 5.0);
 		Filme filme7 = new Filme("Lua de Cristal", 1, 1.0);
 		filmes = Arrays.asList(filme1, filme2, filme3, filme4, filme5, filme6, filme7);
 		
