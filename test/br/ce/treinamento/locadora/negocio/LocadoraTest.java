@@ -125,6 +125,26 @@ public class LocadoraTest {
 	}
 	
 	@Test
+	public void deveEntregarFilmeNaSegundaAoAlugar4FilmesNaSexta() throws LocadoraException {
+		//Cenario
+		Filme filme1 = new Filme("Iron Man", 2, 4.0);
+		Filme filme2 = new Filme("Capitao America", 1, 3.0);
+		Filme filme3 = new Filme("Thor", 1, 2.50);
+		Filme filme4 = new Filme("The Avengers", 10, 5.0);
+		filmes = Arrays.asList(filme1, filme2, filme3, filme4);
+		
+		Locacao locacao = locadora.alugarFilme(usuario, filmes);
+		
+		Calendar dataEsperada = Calendar.getInstance();
+		dataEsperada.add(Calendar.DAY_OF_MONTH, 3);
+		
+		Calendar dataRetorno = Calendar.getInstance();
+		dataRetorno.setTime(locacao.getDataRetorno());
+		
+		Assert.assertEquals(dataEsperada.get(Calendar.DAY_OF_MONTH), dataRetorno.get(Calendar.DAY_OF_MONTH));
+	}
+	
+	@Test
 	public void deveDar25PercDescontoAoAlugar4FilmesNaSegunda() throws LocadoraException {
 		Filme filme1 = new Filme("Lord of the rings: The Fellowship of the ring", 5, 4.0);
 		Filme filme2 = new Filme("Lord of the rings: The Two Towers", 5, 4.0);

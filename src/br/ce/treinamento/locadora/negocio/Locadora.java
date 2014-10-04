@@ -49,13 +49,13 @@ public class Locadora {
 		//Entrega no dia seguinte, exceto quando o dia seguinte eh domingo... nesse caso, a entrega fica para segunda
 		Calendar dataEntrega = Calendar.getInstance();
 		dataEntrega.add(Calendar.DAY_OF_MONTH, 1);
+		if(filmes.size() >= 4) {
+			dataEntrega.add(Calendar.DAY_OF_MONTH, 1);
+		}
 		if(dataEntrega.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
 			dataEntrega.add(Calendar.DAY_OF_MONTH, 1);
 		}
 		
-		if(filmes.size() >= 4) {
-			dataEntrega.add(Calendar.DAY_OF_MONTH, 1);
-		}
 		locacao.setDataRetorno(dataEntrega.getTime());
 		for(Filme filme: filmes) {
 			filme.setEstoque(filme.getEstoque() - 1);
