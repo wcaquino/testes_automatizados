@@ -3,6 +3,7 @@ package br.ce.treinamento.locadora.negocio;
 import java.util.Calendar;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 import br.ce.treinamento.locadora.entidades.Filme;
@@ -12,42 +13,54 @@ import br.ce.treinamento.locadora.exceptions.LocadoraException;
 
 public class LocadoraTest {
 
+	private Locadora locadora;
+	private Usuario usuario;
+	
+	@Before
+	public void setup(){
+		locadora = new Locadora();
+		usuario = new Usuario("Joseh");
+	}
+	
 	@Test
 	public void deveTerDataRetornoAmanhaAoAlugarFilme() throws LocadoraException{
 		//Cenario
-		Locadora locadora = new Locadora();
-		Usuario usuario = new Usuario("Joseh");
 		Filme filme = new Filme("GodFather", 5, 5.0);
 		
 		//Acao
 		Locacao locacao = locadora.alugarFilme(usuario, filme);
 		
 		//Validacao
-		Assert.assertTrue(locacao.getValor().equals(5.0));
-		
 		Calendar calendarDataRetorno = Calendar.getInstance();
 		calendarDataRetorno.setTime(locacao.getDataRetorno());
 		
-		Assert.assertTrue(calendarDataRetorno.get(Calendar.DAY_OF_MONTH) == 6);
+		Calendar dataRetornoEsperada = Calendar.getInstance();
+		dataRetornoEsperada.add(Calendar.DAY_OF_MONTH, 1);
+		
+		Assert.assertEquals(calendarDataRetorno.get(Calendar.DAY_OF_MONTH), dataRetornoEsperada.get(Calendar.DAY_OF_MONTH));
 	}
 	
 	@Test
-	public void deveReduzirEstoqueAoAlugarFilme() {
+	public void deveCalcularPrecoAoAlugarFilme() throws LocadoraException{
 		//Cenario
-		Locadora locadora = new Locadora();
-		Usuario usuario = new Usuario("Joao");
-		Filme filme = new Filme("E o tempo levou", 0, 1.50);
+		Filme filme = new Filme("GodFather", 5, 5.0);
 		
-		try {
-			//Acao
-			Locacao locacao = locadora.alugarFilme(usuario, filme);
-			
-			//Verificacao
-			Assert.assertTrue(locacao.getFilme().getEstoque() == 2);
-		} catch (LocadoraException e) {
-			e.printStackTrace();
-			Assert.fail();
-		}
+		//Acao
+		Locacao locacao = locadora.alugarFilme(usuario, filme);
 		
+		//Validacao
+		Assert.assertEquals(5.0, locacao.getValor(), 0.001);
+	}
+	
+	@Test
+	public void deveReduzirEstoqueAoAlugarFilme() throws LocadoraException {
+		//Cenario
+		Filme filme = new Filme("E o tempo levou", 3, 1.50);
+		
+		//Acao
+		Locacao locacao = locadora.alugarFilme(usuario, filme);
+		
+		//Verificacao
+		Assert.assertEquals(2, locacao.getFilme().getEstoque().intValue());
 	}
 }
