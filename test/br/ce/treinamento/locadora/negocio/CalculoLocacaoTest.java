@@ -1,10 +1,17 @@
 package br.ce.treinamento.locadora.negocio;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.number.IsCloseTo.closeTo;
+
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
 
+import org.hamcrest.CoreMatchers;
+import org.hamcrest.number.IsCloseTo;
 import org.junit.Assert;
+import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,9 +34,9 @@ public class CalculoLocacaoTest {
 	private static Filme filme1 = new Filme("Lord of the rings: The Fellowship of the ring", 5, 4.0);
 	private static Filme filme2 = new Filme("Lord of the rings: The Two Towers", 5, 4.0);
 	private static Filme filme3 = new Filme("Lord of the rings: The Return of the King", 5, 4.0);
-	private static Filme filme4 = new Filme("The Hobbit: There and back again", 5, 5.0);
-	private static Filme filme5 = new Filme("The Hobbit: Smaug Desolation", 5, 5.0);
-	private static Filme filme6 = new Filme("The Hobbit: 5 exercitos", 5, 5.0);
+	private static Filme filme4 = new Filme("The Hobbit: An unexpected journey", 5, 5.0);
+	private static Filme filme5 = new Filme("The Hobbit: The desolation of Smaug", 5, 5.0);
+	private static Filme filme6 = new Filme("The Hobbit: The battle of the five armies", 5, 5.0);
 	private static Filme filme7 = new Filme("Lua de Cristal", 1, 1.0);
 	
 	@Parameters(name= "{index}: Valor da locacao para {0}={2}")
@@ -55,7 +62,9 @@ public class CalculoLocacaoTest {
 
 	@Test
 	public void testarValoresDeLocacao() throws LocadoraException{
+		Assume.assumeThat(Calendar.getInstance().get(Calendar.DAY_OF_WEEK), is(Calendar.MONDAY));
+		
 		Locacao locacao = locadora.alugarFilme(new Usuario("Maria"), filmes);
-		Assert.assertEquals(cenario, valor, locacao.getValor(), 0.001);
+		Assert.assertThat(locacao.getValor(), is(closeTo(valor, 0.001)));
 	}
 }

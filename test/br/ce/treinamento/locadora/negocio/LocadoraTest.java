@@ -1,5 +1,10 @@
 package br.ce.treinamento.locadora.negocio;
 
+import static br.ce.treinamento.util.DataUtil.obterDataZerada;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.number.IsCloseTo.closeTo;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -16,6 +21,7 @@ import br.ce.treinamento.locadora.entidades.Filme;
 import br.ce.treinamento.locadora.entidades.Locacao;
 import br.ce.treinamento.locadora.entidades.Usuario;
 import br.ce.treinamento.locadora.exceptions.LocadoraException;
+import br.ce.treinamento.util.DataUtil;
 
 public class LocadoraTest {
 
@@ -49,7 +55,7 @@ public class LocadoraTest {
 		Calendar dataRetornoEsperada = Calendar.getInstance();
 		dataRetornoEsperada.add(Calendar.DAY_OF_MONTH, 1);
 		
-		Assert.assertEquals(calendarDataRetorno.get(Calendar.DAY_OF_MONTH), dataRetornoEsperada.get(Calendar.DAY_OF_MONTH));
+		Assert.assertThat(obterDataZerada(calendarDataRetorno), is(equalTo(obterDataZerada(dataRetornoEsperada))));
 	}
 	
 	@Test
@@ -62,7 +68,7 @@ public class LocadoraTest {
 		Locacao locacao = locadora.alugarFilme(usuario, filmes);
 		
 		//Validacao
-		Assert.assertEquals(5.0, locacao.getValor(), 0.001);
+		Assert.assertThat(locacao.getValor(), is(closeTo(5.0, 0.001)));
 	}
 	
 	@Test
@@ -75,7 +81,7 @@ public class LocadoraTest {
 		Locacao locacao = locadora.alugarFilme(usuario, filmes);
 		
 		//Verificacao
-		Assert.assertEquals(2, locacao.getFilmes().get(0).getEstoque().intValue());
+		Assert.assertThat(locacao.getFilmes().get(0).getEstoque().intValue(), is(2));
 	}
 	
 	@Test
@@ -91,7 +97,8 @@ public class LocadoraTest {
 		//Verificacao
 			Assert.fail("Uma excecao deveria ter sido lancada na linha anterior");
 		} catch (LocadoraException e) {
-			Assert.assertEquals("Nao eh possivel alugar filme que nao estah no estoque", e.getMessage());
+//			Assert.assertEquals("Nao eh possivel alugar filme que nao estah no estoque", e.getMessage());
+			Assert.assertThat(e.getMessage(), is(equalTo("Nao eh possivel alugar filme que nao estah no estoque")));
 		}
 	}
 	
@@ -124,7 +131,7 @@ public class LocadoraTest {
 		Calendar dataRetorno = Calendar.getInstance();
 		dataRetorno.setTime(locacao.getDataRetorno());
 		
-		Assert.assertEquals(dataEsperada.get(Calendar.DAY_OF_MONTH), dataRetorno.get(Calendar.DAY_OF_MONTH));
+		Assert.assertThat(dataEsperada.get(Calendar.DAY_OF_MONTH), is(equalTo(dataRetorno.get(Calendar.DAY_OF_MONTH))));
 	}
 	
 	@Test
@@ -146,6 +153,6 @@ public class LocadoraTest {
 		Calendar dataRetorno = Calendar.getInstance();
 		dataRetorno.setTime(locacao.getDataRetorno());
 		
-		Assert.assertEquals(dataEsperada.get(Calendar.DAY_OF_MONTH), dataRetorno.get(Calendar.DAY_OF_MONTH));
+		Assert.assertThat(dataEsperada.get(Calendar.DAY_OF_MONTH), is(equalTo(dataRetorno.get(Calendar.DAY_OF_MONTH))));
 	}
 }
