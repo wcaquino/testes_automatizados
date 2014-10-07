@@ -8,8 +8,6 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
 
-import org.hamcrest.CoreMatchers;
-import org.hamcrest.number.IsCloseTo;
 import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.Before;
@@ -26,7 +24,9 @@ import br.ce.treinamento.locadora.exceptions.LocadoraException;
 @RunWith(Parameterized.class)
 public class CalculoLocacaoTest {
 
+	@SuppressWarnings("unused")
 	private String cenario;
+	
 	private List<Filme> filmes;
 	private Double valor;
 	private Locadora locadora;

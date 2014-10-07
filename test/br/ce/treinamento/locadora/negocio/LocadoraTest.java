@@ -1,7 +1,8 @@
 package br.ce.treinamento.locadora.negocio;
 
+import static br.ce.treinamento.matchers.MatchersProprios.hojeComDiferencaDe;
+import static br.ce.treinamento.matchers.MatchersProprios.hojeComDiferencaDias;
 import static br.ce.treinamento.matchers.MatchersProprios.mesmoDiaQue;
-import static br.ce.treinamento.util.DataUtil.obterDataZerada;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.number.IsCloseTo.closeTo;
@@ -22,8 +23,6 @@ import br.ce.treinamento.locadora.entidades.Filme;
 import br.ce.treinamento.locadora.entidades.Locacao;
 import br.ce.treinamento.locadora.entidades.Usuario;
 import br.ce.treinamento.locadora.exceptions.LocadoraException;
-import br.ce.treinamento.matchers.MatchersProprios;
-import br.ce.treinamento.util.DataUtil;
 
 public class LocadoraTest {
 
@@ -127,13 +126,7 @@ public class LocadoraTest {
 		
 		Locacao locacao = locadora.alugarFilme(usuario, filmes);
 		
-		Calendar dataEsperada = Calendar.getInstance();
-		dataEsperada.add(Calendar.DAY_OF_MONTH, 2);
-		
-		Calendar dataRetorno = Calendar.getInstance();
-		dataRetorno.setTime(locacao.getDataRetorno());
-		
-		Assert.assertThat(dataEsperada.get(Calendar.DAY_OF_MONTH), is(equalTo(dataRetorno.get(Calendar.DAY_OF_MONTH))));
+		Assert.assertThat(locacao.getDataRetorno(), hojeComDiferencaDe(2, Calendar.DAY_OF_MONTH));
 	}
 	
 	@Test
@@ -149,12 +142,6 @@ public class LocadoraTest {
 		
 		Locacao locacao = locadora.alugarFilme(usuario, filmes);
 		
-		Calendar dataEsperada = Calendar.getInstance();
-		dataEsperada.add(Calendar.DAY_OF_MONTH, 3);
-		
-		Calendar dataRetorno = Calendar.getInstance();
-		dataRetorno.setTime(locacao.getDataRetorno());
-		
-		Assert.assertThat(dataEsperada.get(Calendar.DAY_OF_MONTH), is(equalTo(dataRetorno.get(Calendar.DAY_OF_MONTH))));
+		Assert.assertThat(locacao.getDataRetorno(), is(hojeComDiferencaDias(3)));
 	}
 }
