@@ -1,5 +1,6 @@
 package br.ce.treinamento.locadora.negocio;
 
+import static br.ce.treinamento.matchers.MatchersProprios.mesmoDiaQue;
 import static br.ce.treinamento.util.DataUtil.obterDataZerada;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -21,6 +22,7 @@ import br.ce.treinamento.locadora.entidades.Filme;
 import br.ce.treinamento.locadora.entidades.Locacao;
 import br.ce.treinamento.locadora.entidades.Usuario;
 import br.ce.treinamento.locadora.exceptions.LocadoraException;
+import br.ce.treinamento.matchers.MatchersProprios;
 import br.ce.treinamento.util.DataUtil;
 
 public class LocadoraTest {
@@ -55,7 +57,7 @@ public class LocadoraTest {
 		Calendar dataRetornoEsperada = Calendar.getInstance();
 		dataRetornoEsperada.add(Calendar.DAY_OF_MONTH, 1);
 		
-		Assert.assertThat(obterDataZerada(calendarDataRetorno), is(equalTo(obterDataZerada(dataRetornoEsperada))));
+		Assert.assertThat(calendarDataRetorno, is(mesmoDiaQue(dataRetornoEsperada)));
 	}
 	
 	@Test
