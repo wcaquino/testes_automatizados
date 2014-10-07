@@ -21,16 +21,21 @@ public class DataComDiferencaVariavelMatcher extends TypeSafeMatcher<Date>{
 	
 	@Override
 	public void describeTo(Description description) {
-		description.appendText("Uma data com diferenca");
+		description.appendText("A Data: <" + obterData().getTime() + ">");
 	}
 
 	@Override
 	protected boolean matchesSafely(Date item) {
+		Calendar calendar = obterData();
+		
+		return calendar.getTime().equals(obterDataZerada(item));
+	}
+	
+	private Calendar obterData(){
 		Calendar calendar = Calendar.getInstance();
 		calendar = obterDataZerada(calendar);
 		calendar.add(tipoCalendar, diferenca);
-		
-		return calendar.getTime().equals(obterDataZerada(item));
+		return calendar;
 	}
 
 }
