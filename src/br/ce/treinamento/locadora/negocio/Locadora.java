@@ -12,9 +12,14 @@ import br.ce.treinamento.locadora.exceptions.LocadoraException;
 public class Locadora {
 	
 	private LocacaoDao locacaoDao;
+	private SPCService spcService;
 
 	public Locacao alugarFilme(Usuario usuario, List<Filme> filmes) throws LocadoraException {
 		validarCamposObrigatorios(usuario, filmes);
+		
+		if(spcService.obterDebito(usuario)) {
+			throw new LocadoraException("Usuario com pendencia no SPC");
+		}
 		
 		Locacao locacao = new Locacao();
 		locacao.setFilmes(filmes);
@@ -86,5 +91,9 @@ public class Locadora {
 
 	public void setLocacaoDao(LocacaoDao locacaoDao) {
 		this.locacaoDao = locacaoDao;
+	}
+
+	public void setSpcService(SPCService spcService) {
+		this.spcService = spcService;
 	}
 }

@@ -11,9 +11,12 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
+import org.hamcrest.CoreMatchers;
+import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Rule;
@@ -33,6 +36,7 @@ public class LocadoraTest {
 	private Usuario usuario;
 	private List<Filme> filmes;
 	private LocacaoDao locacaoDao;
+	private SPCService spcService;
 	
 	@Rule
 	public ExpectedException excecaoEsperada = ExpectedException.none();
@@ -41,7 +45,9 @@ public class LocadoraTest {
 	public void setup(){
 		locadora = new Locadora();
 		locacaoDao = Mockito.mock(LocacaoDao.class);
+		spcService = Mockito.mock(SPCService.class);
 		locadora.setLocacaoDao(locacaoDao);
+		locadora.setSpcService(spcService);
 		usuario = new Usuario("Joseh");
 		filmes = new ArrayList<Filme>();
 	}
@@ -149,5 +155,36 @@ public class LocadoraTest {
 		Locacao locacao = locadora.alugarFilme(usuario, filmes);
 		
 		assertThat(locacao.getDataRetorno(), is(hojeComDiferencaDias(3)));
+	}
+	
+	@Test
+	public void naoDeveAlugarFilmesParaUsuarioComProblemasNoSPC() throws LocadoraException{
+		//Cenario
+		Filme filme = new Filme("Truque de mestre", 5, 4.0);
+		filmes = Arrays.asList(filme);
+		
+		Mockito.when(spcService.obterDebito(usuario)).thenReturn(true);
+		
+		//Acao
+		try {
+			locadora.alugarFilme(usuario, filmes);
+			Assert.fail();
+			//Verificacao
+		} catch (LocadoraException e) {
+			Assert.assertThat(e.getMessage(), is(equalTo("Usuario com pendencia no SPC")));
+		}
+		
+	}
+
+	@Test
+	public void deveAlugarFilmesParaUsuarioSemProblemasNoSPC() throws LocadoraException{
+		//Cenario
+		Filme filme = new Filme("Truque de mestre", 5, 4.0);
+		filmes = Arrays.asList(filme);
+		
+		Mockito.when(spcService.obterDebito(usuario)).thenReturn(false);
+		
+		//Acao
+		locadora.alugarFilme(usuario, filmes);
 	}
 }
