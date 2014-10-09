@@ -13,6 +13,7 @@ public class Locadora {
 	
 	private LocacaoDao locacaoDao;
 	private SPCService spcService;
+	private EmailService emailService;
 
 	public Locacao alugarFilme(Usuario usuario, List<Filme> filmes) throws LocadoraException {
 		validarCamposObrigatorios(usuario, filmes);
@@ -89,6 +90,13 @@ public class Locadora {
 		return valorLocacao;
 	}
 
+	public void notificarAtrasados() {
+		List<Locacao> locacoes = locacaoDao.obterLocacoesAtrasadas();
+		for(Locacao locacao: locacoes) {
+			emailService.notificarAtraso(locacao.getUsuario());
+		}
+	}
+
 	public void setLocacaoDao(LocacaoDao locacaoDao) {
 		this.locacaoDao = locacaoDao;
 	}
@@ -96,4 +104,9 @@ public class Locadora {
 	public void setSpcService(SPCService spcService) {
 		this.spcService = spcService;
 	}
+
+	public void setEmailService(EmailService emailService) {
+		this.emailService = emailService;
+	}
+
 }

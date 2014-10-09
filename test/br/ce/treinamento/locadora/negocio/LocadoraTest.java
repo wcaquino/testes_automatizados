@@ -6,6 +6,8 @@ import static br.ce.treinamento.matchers.MatchersProprios.mesmoDiaQue;
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.number.IsCloseTo.closeTo;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
@@ -15,7 +17,6 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
-import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.Before;
@@ -37,6 +38,7 @@ public class LocadoraTest {
 	private List<Filme> filmes;
 	private LocacaoDao locacaoDao;
 	private SPCService spcService;
+	private EmailService emailService;
 	
 	@Rule
 	public ExpectedException excecaoEsperada = ExpectedException.none();
@@ -46,8 +48,10 @@ public class LocadoraTest {
 		locadora = new Locadora();
 		locacaoDao = Mockito.mock(LocacaoDao.class);
 		spcService = Mockito.mock(SPCService.class);
+		emailService = Mockito.mock(EmailService.class);
 		locadora.setLocacaoDao(locacaoDao);
 		locadora.setSpcService(spcService);
+		locadora.setEmailService(emailService);
 		usuario = new Usuario("Joseh");
 		filmes = new ArrayList<Filme>();
 	}
@@ -185,6 +189,23 @@ public class LocadoraTest {
 		Mockito.when(spcService.obterDebito(usuario)).thenReturn(false);
 		
 		//Acao
-		locadora.alugarFilme(usuario, filmes);
+		Locacao locacao = locadora.alugarFilme(usuario, filmes);
+		
+		//Verificacao
+		Assert.assertThat(locacao, is(not(nullValue())));
+	}
+	
+	@Test
+	public void deveNotificarUsuariosComLocacoesAtrasadas(){
+		Locacao locacao = new Locacao();
+		locacao.setFilmes(Arrays.asList(new Filme("Dave", 1, 1.5)));
+		locacao.setUsuario(new Usuario("Jose"));
+		List<Locacao> locacoes = Arrays.asList(locacao);
+		
+		Mockito.when(locacaoDao.obterLocacoesAtrasadas()).thenReturn(locacoes);
+		
+		locadora.notificarAtrasados();
+		
+		Mockito.verify(emailService).notificarAtraso(new Usuario("Jose"));
 	}
 }

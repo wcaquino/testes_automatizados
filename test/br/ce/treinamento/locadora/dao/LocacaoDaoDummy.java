@@ -1,5 +1,7 @@
 package br.ce.treinamento.locadora.dao;
 
+import java.util.List;
+
 import br.ce.treinamento.locadora.entidades.Locacao;
 import br.ce.treinamento.locadora.exceptions.LocadoraException;
 
@@ -9,6 +11,12 @@ public class LocacaoDaoDummy implements LocacaoDao {
 	public void salvar(Locacao locacao) throws LocadoraException {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public List<Locacao> obterLocacoesAtrasadas() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
