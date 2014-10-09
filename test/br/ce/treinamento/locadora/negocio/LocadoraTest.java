@@ -20,6 +20,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import br.ce.treinamento.locadora.dao.LocacaoDao;
+import br.ce.treinamento.locadora.dao.LocacaoDaoDummy;
 import br.ce.treinamento.locadora.entidades.Filme;
 import br.ce.treinamento.locadora.entidades.Locacao;
 import br.ce.treinamento.locadora.entidades.Usuario;
@@ -37,6 +39,7 @@ public class LocadoraTest {
 	@Before
 	public void setup(){
 		locadora = new Locadora();
+		locadora.setLocacaoDao(new LocacaoDaoDummy());
 		usuario = new Usuario("Joseh");
 		filmes = new ArrayList<Filme>();
 	}

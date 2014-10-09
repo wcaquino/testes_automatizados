@@ -83,4 +83,8 @@ public class Locadora {
 		}
 		return valorLocacao;
 	}
+
+	public void setLocacaoDao(LocacaoDao locacaoDao) {
+		this.locacaoDao = locacaoDao;
+	}
 }
