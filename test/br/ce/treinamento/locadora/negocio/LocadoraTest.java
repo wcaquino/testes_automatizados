@@ -19,9 +19,9 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.mockito.Mockito;
 
 import br.ce.treinamento.locadora.dao.LocacaoDao;
-import br.ce.treinamento.locadora.dao.LocacaoDaoDummy;
 import br.ce.treinamento.locadora.entidades.Filme;
 import br.ce.treinamento.locadora.entidades.Locacao;
 import br.ce.treinamento.locadora.entidades.Usuario;
@@ -32,6 +32,7 @@ public class LocadoraTest {
 	private Locadora locadora;
 	private Usuario usuario;
 	private List<Filme> filmes;
+	private LocacaoDao locacaoDao;
 	
 	@Rule
 	public ExpectedException excecaoEsperada = ExpectedException.none();
@@ -39,7 +40,8 @@ public class LocadoraTest {
 	@Before
 	public void setup(){
 		locadora = new Locadora();
-		locadora.setLocacaoDao(new LocacaoDaoDummy());
+		locacaoDao = Mockito.mock(LocacaoDao.class);
+		locadora.setLocacaoDao(locacaoDao);
 		usuario = new Usuario("Joseh");
 		filmes = new ArrayList<Filme>();
 	}
