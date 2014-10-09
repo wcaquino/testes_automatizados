@@ -3,12 +3,15 @@ package br.ce.treinamento.locadora.negocio;
 import java.util.Calendar;
 import java.util.List;
 
+import br.ce.treinamento.locadora.dao.LocacaoDao;
 import br.ce.treinamento.locadora.entidades.Filme;
 import br.ce.treinamento.locadora.entidades.Locacao;
 import br.ce.treinamento.locadora.entidades.Usuario;
 import br.ce.treinamento.locadora.exceptions.LocadoraException;
 
 public class Locadora {
+	
+	private LocacaoDao locacaoDao;
 
 	public Locacao alugarFilme(Usuario usuario, List<Filme> filmes) throws LocadoraException {
 		validarCamposObrigatorios(usuario, filmes);
@@ -25,6 +28,8 @@ public class Locadora {
 		for(Filme filme: filmes) {
 			filme.setEstoque(filme.getEstoque() - 1);
 		}
+		
+		locacaoDao.salvar(locacao);
 		
 		return locacao;
 	}
