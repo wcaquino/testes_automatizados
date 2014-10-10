@@ -99,17 +99,4 @@ public class Locadora {
 			}
 		}
 	}
-
-	public void setLocacaoDao(LocacaoDao locacaoDao) {
-		this.locacaoDao = locacaoDao;
-	}
-
-	public void setSpcService(SPCService spcService) {
-		this.spcService = spcService;
-	}
-
-	public void setEmailService(EmailService emailService) {
-		this.emailService = emailService;
-	}
-
 }

@@ -25,7 +25,10 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 
 import br.ce.treinamento.locadora.builders.LocacaoBuilder;
 import br.ce.treinamento.locadora.builders.UsuarioBuilder;
@@ -37,27 +40,28 @@ import br.ce.treinamento.locadora.exceptions.LocadoraException;
 
 public class LocadoraTest {
 
+	@InjectMocks
 	private Locadora locadora;
+
+	@Mock
+	private LocacaoDao locacaoDao;
+	@Mock
+	private SPCService spcService;
+	@Mock
+	private EmailService emailService;
+	
 	private Usuario usuario;
 	private List<Filme> filmes;
-	private LocacaoDao locacaoDao;
-	private SPCService spcService;
-	private EmailService emailService;
 	
 	@Rule
 	public ExpectedException excecaoEsperada = ExpectedException.none();
 	
 	@Before
 	public void setup(){
-		locadora = new Locadora();
-		locacaoDao = Mockito.mock(LocacaoDao.class);
-		spcService = Mockito.mock(SPCService.class);
-		emailService = Mockito.mock(EmailService.class);
-		locadora.setLocacaoDao(locacaoDao);
-		locadora.setSpcService(spcService);
-		locadora.setEmailService(emailService);
 		usuario = new Usuario("Joseh");
 		filmes = new ArrayList<Filme>();
+		
+		MockitoAnnotations.initMocks(this);
 	}
 	
 	@Test
