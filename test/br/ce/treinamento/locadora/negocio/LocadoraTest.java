@@ -3,7 +3,6 @@ package br.ce.treinamento.locadora.negocio;
 import static br.ce.treinamento.matchers.MatchersProprios.hojeComDiferencaDe;
 import static br.ce.treinamento.matchers.MatchersProprios.hojeComDiferencaDias;
 import static br.ce.treinamento.matchers.MatchersProprios.mesmoDiaQue;
-import static br.ce.treinamento.util.DataUtil.obterDataDiferencaDias;
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -28,12 +27,13 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.mockito.Mockito;
 
+import br.ce.treinamento.locadora.builders.LocacaoBuilder;
+import br.ce.treinamento.locadora.builders.UsuarioBuilder;
 import br.ce.treinamento.locadora.dao.LocacaoDao;
 import br.ce.treinamento.locadora.entidades.Filme;
 import br.ce.treinamento.locadora.entidades.Locacao;
 import br.ce.treinamento.locadora.entidades.Usuario;
 import br.ce.treinamento.locadora.exceptions.LocadoraException;
-import br.ce.treinamento.util.DataUtil;
 
 public class LocadoraTest {
 
@@ -201,25 +201,29 @@ public class LocadoraTest {
 	
 	@Test
 	public void deveNotificarUsuariosComLocacoesAtrasadas(){
-		Locacao locacao = new Locacao();
-		locacao.setFilmes(Arrays.asList(new Filme("Dave", 1, 1.5)));
-		locacao.setDataRetorno(obterDataDiferencaDias(-2).getTime());
-		locacao.setUsuario(new Usuario("Jose"));
+		Locacao locacao = LocacaoBuilder.umaLocacao()
+					.comUsuario(UsuarioBuilder.umUsuario().comNome("Jose").criar())
+					.comDataLocacaoDiferencaHoje(-2)
+					.comDataRetornoDiferencaHoje(-1)
+				.criar(); 
 		
-		Locacao locacao2 = new Locacao();
-		locacao2.setFilmes(Arrays.asList(new Filme("Dave", 1, 1.5)));
-		locacao2.setDataRetorno(obterDataDiferencaDias(-1).getTime());
-		locacao2.setUsuario(new Usuario("Maria"));
+		Locacao locacao2 = LocacaoBuilder.umaLocacao()
+				.comUsuario(UsuarioBuilder.umUsuario().comNome("Maria").criar())
+				.comDataLocacaoDiferencaHoje(-3)
+				.comDataRetornoDiferencaHoje(-2)
+			.criar(); 
+
+		Locacao locacao3 = LocacaoBuilder.umaLocacao()
+				.comUsuario(UsuarioBuilder.umUsuario().comNome("Josefa").criar())
+				.comDataLocacaoDiferencaHoje(-1)
+				.comDataRetornoDiferencaHoje(1)
+			.criar(); 
 		
-		Locacao locacao3 = new Locacao();
-		locacao3.setFilmes(Arrays.asList(new Filme("Dave", 1, 1.5)));
-		locacao3.setDataRetorno(obterDataDiferencaDias(1).getTime());
-		locacao3.setUsuario(new Usuario("Josefa"));
-		
-		Locacao locacao4 = new Locacao();
-		locacao4.setFilmes(Arrays.asList(new Filme("Dave", 1, 1.5)));
-		locacao4.setDataRetorno(obterDataDiferencaDias(-1).getTime());
-		locacao4.setUsuario(new Usuario("Jose"));
+		Locacao locacao4 = LocacaoBuilder.umaLocacao()
+				.comUsuario(UsuarioBuilder.umUsuario().comNome("Jose").criar())
+				.comDataLocacaoDiferencaHoje(-4)
+				.comDataRetornoDiferencaHoje(-2)
+			.criar(); 
 		
 		List<Locacao> locacoes = Arrays.asList(locacao, locacao2, locacao3, locacao4);
 		
