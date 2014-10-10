@@ -91,9 +91,12 @@ public class Locadora {
 	}
 
 	public void notificarAtrasados() {
-		List<Locacao> locacoes = locacaoDao.obterLocacoesAtrasadas();
+		List<Locacao> locacoes = locacaoDao.obterLocacoesPendentes();
+		Calendar dataAtual = Calendar.getInstance();
 		for(Locacao locacao: locacoes) {
-			emailService.notificarAtraso(locacao.getUsuario());
+			if(dataAtual.getTime().after(locacao.getDataRetorno())) {
+				emailService.notificarAtraso(locacao.getUsuario());
+			}
 		}
 	}
 

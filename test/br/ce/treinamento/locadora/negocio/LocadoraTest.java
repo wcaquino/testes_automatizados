@@ -3,6 +3,7 @@ package br.ce.treinamento.locadora.negocio;
 import static br.ce.treinamento.matchers.MatchersProprios.hojeComDiferencaDe;
 import static br.ce.treinamento.matchers.MatchersProprios.hojeComDiferencaDias;
 import static br.ce.treinamento.matchers.MatchersProprios.mesmoDiaQue;
+import static br.ce.treinamento.util.DataUtil.obterDataDiferencaDias;
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -11,6 +12,8 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.number.IsCloseTo.closeTo;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,6 +33,7 @@ import br.ce.treinamento.locadora.entidades.Filme;
 import br.ce.treinamento.locadora.entidades.Locacao;
 import br.ce.treinamento.locadora.entidades.Usuario;
 import br.ce.treinamento.locadora.exceptions.LocadoraException;
+import br.ce.treinamento.util.DataUtil;
 
 public class LocadoraTest {
 
@@ -199,13 +203,33 @@ public class LocadoraTest {
 	public void deveNotificarUsuariosComLocacoesAtrasadas(){
 		Locacao locacao = new Locacao();
 		locacao.setFilmes(Arrays.asList(new Filme("Dave", 1, 1.5)));
+		locacao.setDataRetorno(obterDataDiferencaDias(-2).getTime());
 		locacao.setUsuario(new Usuario("Jose"));
-		List<Locacao> locacoes = Arrays.asList(locacao);
 		
-		Mockito.when(locacaoDao.obterLocacoesAtrasadas()).thenReturn(locacoes);
+		Locacao locacao2 = new Locacao();
+		locacao2.setFilmes(Arrays.asList(new Filme("Dave", 1, 1.5)));
+		locacao2.setDataRetorno(obterDataDiferencaDias(-1).getTime());
+		locacao2.setUsuario(new Usuario("Maria"));
+		
+		Locacao locacao3 = new Locacao();
+		locacao3.setFilmes(Arrays.asList(new Filme("Dave", 1, 1.5)));
+		locacao3.setDataRetorno(obterDataDiferencaDias(1).getTime());
+		locacao3.setUsuario(new Usuario("Josefa"));
+		
+		Locacao locacao4 = new Locacao();
+		locacao4.setFilmes(Arrays.asList(new Filme("Dave", 1, 1.5)));
+		locacao4.setDataRetorno(obterDataDiferencaDias(-1).getTime());
+		locacao4.setUsuario(new Usuario("Jose"));
+		
+		List<Locacao> locacoes = Arrays.asList(locacao, locacao2, locacao3, locacao4);
+		
+		Mockito.when(locacaoDao.obterLocacoesPendentes()).thenReturn(locacoes);
 		
 		locadora.notificarAtrasados();
 		
-		Mockito.verify(emailService).notificarAtraso(new Usuario("Jose"));
+		Mockito.verify(emailService, times(2)).notificarAtraso(new Usuario("Jose"));
+		Mockito.verify(emailService).notificarAtraso(new Usuario("Maria"));
+		Mockito.verify(emailService, never()).notificarAtraso(new Usuario("Josefa"));
+		
 	}
 }

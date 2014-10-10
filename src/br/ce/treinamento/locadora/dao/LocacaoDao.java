@@ -9,5 +9,5 @@ public interface LocacaoDao {
 
 	void salvar(Locacao locacao) throws LocadoraException;
 
-	List<Locacao> obterLocacoesAtrasadas();
+	List<Locacao> obterLocacoesPendentes();
 }

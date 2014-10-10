@@ -14,7 +14,7 @@ public class LocacaoDaoDummy implements LocacaoDao {
 	}
 
 	@Override
-	public List<Locacao> obterLocacoesAtrasadas() {
+	public List<Locacao> obterLocacoesPendentes() {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -19,4 +19,10 @@ public class DataUtil {
 		calendar.set(Calendar.MILLISECOND, 0);
 		return calendar;
 	}
+	
+	public static Calendar obterDataDiferencaDias(int dias) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.add(Calendar.DAY_OF_MONTH, dias);
+		return calendar;
+	}
 }
