@@ -33,6 +33,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.mockito.Spy;
 
 import br.ce.treinamento.locadora.builders.LocacaoBuilder;
 import br.ce.treinamento.locadora.builders.UsuarioBuilder;
@@ -41,10 +42,11 @@ import br.ce.treinamento.locadora.entidades.Filme;
 import br.ce.treinamento.locadora.entidades.Locacao;
 import br.ce.treinamento.locadora.entidades.Usuario;
 import br.ce.treinamento.locadora.exceptions.LocadoraException;
+import br.ce.treinamento.util.DataUtil;
 
 public class LocadoraTest {
 
-	@InjectMocks
+	@Spy @InjectMocks
 	private Locadora locadora;
 
 	@Mock
@@ -284,8 +286,12 @@ public class LocadoraTest {
 	@Test
 	public void deveCobrarZeroAoAlugarUsandoFidelidade() throws LocadoraException{
 		Filme filme = new Filme("Truque de mestre", 5, 4.0);
-		Filme filme2 = new Filme("The prestige", 5, 4.0);
+		Filme filme2 = new Filme("The prestige", 0, 4.0);
 		filmes = Arrays.asList(filme, filme2);
+		
+		Mockito.doNothing().when(locadora).validarCamposObrigatorios(usuario, filmes);
+//		Mockito.when(locadora.calcularDataEntrega(filmes)).thenReturn(DataUtil.obterDataDiferencaDias(-1));
+		Mockito.doReturn(DataUtil.obterDataDiferencaDias(-1)).when(locadora).calcularDataEntrega(filmes);
 		
 		locadora.LiberarAluguelComFidelidade(usuario, filmes);
 		
@@ -298,5 +304,7 @@ public class LocadoraTest {
 		assertThat(retorno.getFilmes(), hasSize(2));
 		assertThat(retorno.getFilmes(), hasItems(filme2, filme));
 		assertThat(retorno.getFilmes(), IsIterableContainingInOrder.contains(filme, filme2));
+		
+		System.out.println(retorno.getDataRetorno());
 	}
 }

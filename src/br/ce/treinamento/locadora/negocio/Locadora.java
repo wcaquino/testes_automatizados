@@ -42,7 +42,7 @@ public class Locadora {
 		return locacao;
 	}
 
-	private Calendar calcularDataEntrega(List<Filme> filmes) {
+	public Calendar calcularDataEntrega(List<Filme> filmes) {
 		//Entrega no dia seguinte, exceto quando o dia seguinte eh domingo... nesse caso, a entrega fica para segunda
 		Calendar dataEntrega = Calendar.getInstance();
 		dataEntrega.add(Calendar.DAY_OF_MONTH, 1);
@@ -52,10 +52,11 @@ public class Locadora {
 		if(dataEntrega.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
 			dataEntrega.add(Calendar.DAY_OF_MONTH, 1);
 		}
+		System.out.println("Entrou aqui");
 		return dataEntrega;
 	}
 
-	private void validarCamposObrigatorios(Usuario usuario, List<Filme> filmes) throws LocadoraException {
+	protected void validarCamposObrigatorios(Usuario usuario, List<Filme> filmes) throws LocadoraException {
 		if(usuario == null) {
 			throw new LocadoraException("O usuario nao pode estar vazio");
 		}
@@ -103,6 +104,8 @@ public class Locadora {
 	}
 
 	public void LiberarAluguelComFidelidade(Usuario usuario, List<Filme> filmes) throws LocadoraException {
+		validarCamposObrigatorios(usuario, filmes);
+		
 		Locacao locacao = new Locacao();
 		locacao.setUsuario(usuario);
 		locacao.setFilmes(filmes);
