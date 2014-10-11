@@ -5,9 +5,11 @@ import static br.ce.treinamento.matchers.MatchersProprios.hojeComDiferencaDias;
 import static br.ce.treinamento.matchers.MatchersProprios.mesmoDiaQue;
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.number.IsCloseTo.closeTo;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
@@ -19,12 +21,14 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
+import org.hamcrest.collection.IsIterableContainingInOrder;
 import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -275,5 +279,24 @@ public class LocadoraTest {
 		Mockito.verify(emailService).notificarAtraso(new Usuario("Maria"));
 		Mockito.verify(emailService, never()).notificarAtraso(new Usuario("Josefa"));
 		
+	}
+	
+	@Test
+	public void deveCobrarZeroAoAlugarUsandoFidelidade() throws LocadoraException{
+		Filme filme = new Filme("Truque de mestre", 5, 4.0);
+		Filme filme2 = new Filme("The prestige", 5, 4.0);
+		filmes = Arrays.asList(filme, filme2);
+		
+		locadora.LiberarAluguelComFidelidade(usuario, filmes);
+		
+		ArgumentCaptor<Locacao> argCapt = ArgumentCaptor.forClass(Locacao.class);
+		Mockito.verify(locacaoDao).salvar(argCapt.capture());
+		Locacao retorno = argCapt.getValue();
+		
+		assertThat(retorno.getUsuario(), is(usuario));
+		assertThat(retorno.getValor(), is(0d));
+		assertThat(retorno.getFilmes(), hasSize(2));
+		assertThat(retorno.getFilmes(), hasItems(filme2, filme));
+		assertThat(retorno.getFilmes(), IsIterableContainingInOrder.contains(filme, filme2));
 	}
 }

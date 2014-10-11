@@ -8,6 +8,7 @@ import br.ce.treinamento.locadora.entidades.Filme;
 import br.ce.treinamento.locadora.entidades.Locacao;
 import br.ce.treinamento.locadora.entidades.Usuario;
 import br.ce.treinamento.locadora.exceptions.LocadoraException;
+import br.ce.treinamento.util.DataUtil;
 
 public class Locadora {
 	
@@ -99,5 +100,15 @@ public class Locadora {
 				emailService.notificarAtraso(locacao.getUsuario());
 			}
 		}
+	}
+
+	public void LiberarAluguelComFidelidade(Usuario usuario, List<Filme> filmes) throws LocadoraException {
+		Locacao locacao = new Locacao();
+		locacao.setUsuario(usuario);
+		locacao.setFilmes(filmes);
+		locacao.setValor(0d);
+		locacao.setDataLocacao(Calendar.getInstance().getTime());
+		locacao.setDataRetorno(calcularDataEntrega(filmes).getTime());
+		locacaoDao.salvar(locacao);
 	}
 }
