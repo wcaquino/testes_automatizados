@@ -15,8 +15,9 @@ public class Locadora {
 	private SPCService spcService;
 	private EmailService emailService;
 
-	public Locacao alugarFilme(Usuario usuario, List<Filme> filmes) throws LocadoraException {
+	public Locacao alugarFilme(Usuario usuario, List<Filme> filmes) throws Exception {
 		validarCamposObrigatorios(usuario, filmes);
+		
 		
 		if(spcService.obterDebito(usuario)) {
 			throw new LocadoraException("Usuario com pendencia no SPC");

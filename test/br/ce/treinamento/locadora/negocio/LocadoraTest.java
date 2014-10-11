@@ -65,7 +65,7 @@ public class LocadoraTest {
 	}
 	
 	@Test
-	public void deveTerDataRetornoAmanhaAoAlugarFilme() throws LocadoraException{
+	public void deveTerDataRetornoAmanhaAoAlugarFilme() throws Exception{
 		//Cenario
 		Filme filme = new Filme("GodFather", 5, 5.0);
 		filmes.add(filme);
@@ -84,7 +84,7 @@ public class LocadoraTest {
 	}
 	
 	@Test
-	public void deveCalcularPrecoAoAlugarFilme() throws LocadoraException{
+	public void deveCalcularPrecoAoAlugarFilme() throws Exception{
 		//Cenario
 		Filme filme = new Filme("GodFather", 5, 5.0);
 		filmes.add(filme);
@@ -97,7 +97,7 @@ public class LocadoraTest {
 	}
 	
 	@Test
-	public void deveReduzirEstoqueAoAlugarFilme() throws LocadoraException {
+	public void deveReduzirEstoqueAoAlugarFilme() throws Exception {
 		//Cenario
 		Filme filme = new Filme("E o tempo levou", 3, 1.50);
 		filmes.add(filme);
@@ -110,7 +110,7 @@ public class LocadoraTest {
 	}
 	
 	@Test
-	public void deveLancarExcecaoQuandoAlugarFilmeComEstoqueMinimo() {
+	public void deveLancarExcecaoQuandoAlugarFilmeComEstoqueMinimo() throws Exception {
 		//Cenario
 		Filme filme = new Filme("Matrix", 0, 4.0);
 		filmes.add(filme);
@@ -128,7 +128,7 @@ public class LocadoraTest {
 	}
 	
 	@Test
-	public void deveLancarExcecaoQuandoAlugarFilmeSemFilmeDefinido() throws LocadoraException{
+	public void deveLancarExcecaoQuandoAlugarFilmeSemFilmeDefinido() throws Exception{
 		//Cenario
 		excecaoEsperada.expect(LocadoraException.class);
 		excecaoEsperada.expectMessage("O Filme nao pode estar vazio");
@@ -138,7 +138,7 @@ public class LocadoraTest {
 	}
 	
 	@Test
-	public void deveAdicionarUmDiaNaEntregaAoAlugar4Filmes() throws LocadoraException {
+	public void deveAdicionarUmDiaNaEntregaAoAlugar4Filmes() throws Exception {
 		Assume.assumeFalse(Calendar.getInstance().get(Calendar.DAY_OF_WEEK) == Calendar.FRIDAY);
 		
 		//Cenario
@@ -154,7 +154,7 @@ public class LocadoraTest {
 	}
 	
 	@Test
-	public void deveEntregarFilmeNaSegundaAoAlugar4FilmesNaSexta() throws LocadoraException {
+	public void deveEntregarFilmeNaSegundaAoAlugar4FilmesNaSexta() throws Exception {
 		Assume.assumeTrue(Calendar.getInstance().get(Calendar.DAY_OF_WEEK) == Calendar.FRIDAY);
 		
 		//Cenario
@@ -170,7 +170,7 @@ public class LocadoraTest {
 	}
 	
 	@Test
-	public void naoDeveAlugarFilmesParaUsuarioComProblemasNoSPC() throws LocadoraException{
+	public void naoDeveAlugarFilmesParaUsuarioComProblemasNoSPC() throws Exception{
 		//Cenario
 		Filme filme = new Filme("Truque de mestre", 5, 4.0);
 		filmes = Arrays.asList(filme);
@@ -189,7 +189,7 @@ public class LocadoraTest {
 	}
 
 	@Test
-	public void deveAlugarFilmesParaUsuarioSemProblemasNoSPC() throws LocadoraException{
+	public void deveAlugarFilmesParaUsuarioSemProblemasNoSPC() throws Exception{
 		//Cenario
 		Filme filme = new Filme("Truque de mestre", 5, 4.0);
 		filmes = Arrays.asList(filme);
@@ -201,6 +201,42 @@ public class LocadoraTest {
 		
 		//Verificacao
 		Assert.assertThat(locacao, is(not(nullValue())));
+	}
+	
+	@Test
+	public void deveLancarExcecaoAoAlugarFilmesParaUsuarioSemCPF() throws Exception{
+		//Cenario
+		Filme filme = new Filme("Truque de mestre", 5, 4.0);
+		filmes = Arrays.asList(filme);
+		
+		Mockito.when(spcService.obterDebito(usuario)).thenThrow(new IllegalArgumentException("CPF vazio"));
+
+		try {
+			//Acao
+			locadora.alugarFilme(usuario, filmes);
+		} catch(IllegalArgumentException e) {
+			assertThat(e.getMessage(), is("CPF vazio"));
+		}
+
+		Mockito.verifyZeroInteractions(locacaoDao);
+	}
+	
+	@Test
+	public void deveLancarExcecaoAoAlugarFilmesQuandoErroGeralNoSPC() throws Exception{
+		//Cenario
+		Filme filme = new Filme("Truque de mestre", 5, 4.0);
+		filmes = Arrays.asList(filme);
+		
+		Mockito.when(spcService.obterDebito(usuario)).thenThrow(new Exception("Falha catastrofica"));
+		
+		try {
+			//Acao
+			locadora.alugarFilme(usuario, filmes);
+		} catch(Exception e) {
+			assertThat(e.getMessage(), is("Falha catastrofica"));
+		}
+		
+		Mockito.verifyZeroInteractions(locacaoDao);
 	}
 	
 	@Test

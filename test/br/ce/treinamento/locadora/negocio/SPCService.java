@@ -4,6 +4,6 @@ import br.ce.treinamento.locadora.entidades.Usuario;
 
 public interface SPCService {
 
-	boolean obterDebito(Usuario usuario);
+	boolean obterDebito(Usuario usuario) throws Exception;
 
 }

@@ -61,7 +61,7 @@ public class CalculoLocacaoTest {
 	}
 
 	@Test
-	public void testarValoresDeLocacao() throws LocadoraException{
+	public void testarValoresDeLocacao() throws Exception{
 		Assume.assumeThat(Calendar.getInstance().get(Calendar.DAY_OF_WEEK), is(Calendar.MONDAY));
 		
 		Locacao locacao = locadora.alugarFilme(new Usuario("Maria"), filmes);
