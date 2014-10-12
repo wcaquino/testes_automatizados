@@ -23,4 +23,8 @@ public class MatchersProprios {
 	public static DataComDiferencaVariavelMatcher hojeComDiferencaAnos(int diferenca) {
 		return new DataComDiferencaVariavelMatcher(diferenca, Calendar.YEAR);
 	}
+	
+	public static VerificarMesmaDataMatcher data(String data) {
+		return new VerificarMesmaDataMatcher(data);
+	}
 }

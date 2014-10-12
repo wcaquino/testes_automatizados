@@ -1,5 +1,8 @@
 package br.ce.treinamento.util;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -24,5 +27,15 @@ public class DataUtil {
 		Calendar calendar = Calendar.getInstance();
 		calendar.add(Calendar.DAY_OF_MONTH, dias);
 		return calendar;
+	}
+	
+	public static Date obterData(String data) {
+		DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+		try {
+			return format.parse(data);
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 }
