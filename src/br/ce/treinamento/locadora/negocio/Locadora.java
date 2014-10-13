@@ -1,7 +1,6 @@
 package br.ce.treinamento.locadora.negocio;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import br.ce.treinamento.locadora.dao.LocacaoDao;
@@ -9,7 +8,6 @@ import br.ce.treinamento.locadora.entidades.Filme;
 import br.ce.treinamento.locadora.entidades.Locacao;
 import br.ce.treinamento.locadora.entidades.Usuario;
 import br.ce.treinamento.locadora.exceptions.LocadoraException;
-import br.ce.treinamento.util.DataUtil;
 
 public class Locadora {
 	
@@ -30,7 +28,7 @@ public class Locadora {
 		locacao.setUsuario(usuario);
 		
 		Calendar dataLocacao = Calendar.getInstance();
-		dataLocacao.setTime(new Date());
+//		dataLocacao.setTime(new Date());
 		locacao.setDataLocacao(dataLocacao.getTime());
 		locacao.setValor(calcularValorLocacao(filmes, dataLocacao));
 		locacao.setDataRetorno(calcularDataEntrega(filmes).getTime());
@@ -47,7 +45,7 @@ public class Locadora {
 	public Calendar calcularDataEntrega(List<Filme> filmes) {
 		//Entrega no dia seguinte, exceto quando o dia seguinte eh domingo... nesse caso, a entrega fica para segunda
 		Calendar dataEntrega = Calendar.getInstance();
-		dataEntrega.setTime(new Date());
+//		dataEntrega.setTime(new Date());
 		dataEntrega.add(Calendar.DAY_OF_MONTH, 1);
 		if(filmes.size() >= 4) {
 			dataEntrega.add(Calendar.DAY_OF_MONTH, 1);

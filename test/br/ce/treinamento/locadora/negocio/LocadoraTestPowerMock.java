@@ -7,14 +7,17 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -46,6 +49,7 @@ public class LocadoraTestPowerMock {
 	}
 	
 	@Test
+	@Ignore
 	public void deveRetornarNaQuartaAoAlugarUmFilmeNaTerca() throws Exception{
 		//Cenario
 		PowerMockito.whenNew(Date.class).withNoArguments().thenReturn(DataUtil.obterData("07/10/2014"));
@@ -57,5 +61,28 @@ public class LocadoraTestPowerMock {
 		
 		//Verificacao
 		assertThat(locacao.getDataRetorno(), is(data("08/10/2014")));
+		PowerMockito.verifyNew(Date.class, Mockito.times(2)).withNoArguments();
+	}
+	
+	@Test
+	public void deveRetornarNaSegundaAoAlugarQuatriFilmesNaSexta() throws Exception{
+		//Cenario
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(DataUtil.obterData("10/10/2014"));
+		
+		PowerMockito.mockStatic(Calendar.class);
+		PowerMockito.when(Calendar.getInstance()).thenReturn(calendar);
+		
+		Usuario usuario = umUsuario().criar();
+		List<Filme> filmes = Arrays.asList(umFilme().criar(), umFilme().criar(), umFilme().criar(), umFilme().criar());
+		
+		//Acao
+		Locacao locacao = locadora.alugarFilme(usuario, filmes);
+		
+		//Verificacao
+		assertThat(locacao.getDataRetorno(), is(data("13/10/2014")));
+		
+		PowerMockito.verifyStatic(Mockito.times(2));
+		Calendar.getInstance();
 	}
 }
