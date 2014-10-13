@@ -38,4 +38,10 @@ public class DataUtil {
 			return null;
 		}
 	}
+	
+	public static Calendar obterCalendar(String data) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(obterData(data));
+		return calendar;
+	}
 }

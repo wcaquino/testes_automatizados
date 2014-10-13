@@ -1,8 +1,6 @@
 package br.ce.treinamento.locadora.negocio;
 
-import static br.ce.treinamento.matchers.MatchersProprios.hojeComDiferencaDe;
-import static br.ce.treinamento.matchers.MatchersProprios.hojeComDiferencaDias;
-import static br.ce.treinamento.matchers.MatchersProprios.mesmoDiaQue;
+import static br.ce.treinamento.matchers.MatchersProprios.data;
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.hasItems;
@@ -18,12 +16,10 @@ import static org.mockito.Mockito.times;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.List;
 
 import org.hamcrest.collection.IsIterableContainingInOrder;
 import org.junit.Assert;
-import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -55,6 +51,8 @@ public class LocadoraTest {
 	private SPCService spcService;
 	@Mock
 	private EmailService emailService;
+	@Mock
+	private Relogio relogio;
 	
 	private Usuario usuario;
 	private List<Filme> filmes;
@@ -76,17 +74,13 @@ public class LocadoraTest {
 		Filme filme = new Filme("GodFather", 5, 5.0);
 		filmes.add(filme);
 		
+		Mockito.when(relogio.obterCalendarAtual()).thenReturn(DataUtil.obterCalendar("07/10/2014"));
+		
 		//Acao
 		Locacao locacao = locadora.alugarFilme(usuario, filmes);
 		
 		//Validacao
-		Calendar calendarDataRetorno = Calendar.getInstance();
-		calendarDataRetorno.setTime(locacao.getDataRetorno());
-		
-		Calendar dataRetornoEsperada = Calendar.getInstance();
-		dataRetornoEsperada.add(Calendar.DAY_OF_MONTH, 1);
-		
-		assertThat(calendarDataRetorno, is(mesmoDiaQue(dataRetornoEsperada)));
+		assertThat(locacao.getDataRetorno(), is(data("08/10/2014")));
 	}
 	
 	@Test
@@ -94,6 +88,8 @@ public class LocadoraTest {
 		//Cenario
 		Filme filme = new Filme("GodFather", 5, 5.0);
 		filmes.add(filme);
+		
+		Mockito.when(relogio.obterCalendarAtual()).thenReturn(DataUtil.obterCalendar("07/10/2014"));
 		
 		//Acao
 		Locacao locacao = locadora.alugarFilme(usuario, filmes);
@@ -107,6 +103,8 @@ public class LocadoraTest {
 		//Cenario
 		Filme filme = new Filme("E o tempo levou", 3, 1.50);
 		filmes.add(filme);
+		
+		Mockito.when(relogio.obterCalendarAtual()).thenCallRealMethod();
 		
 		//Acao
 		Locacao locacao = locadora.alugarFilme(usuario, filmes);
@@ -145,7 +143,6 @@ public class LocadoraTest {
 	
 	@Test
 	public void deveAdicionarUmDiaNaEntregaAoAlugar4Filmes() throws Exception {
-		Assume.assumeFalse(Calendar.getInstance().get(Calendar.DAY_OF_WEEK) == Calendar.FRIDAY);
 		
 		//Cenario
 		Filme filme1 = new Filme("Iron Man", 2, 4.0);
@@ -154,14 +151,15 @@ public class LocadoraTest {
 		Filme filme4 = new Filme("The Avengers", 10, 5.0);
 		filmes = asList(filme1, filme2, filme3, filme4);
 		
+		Mockito.when(relogio.obterCalendarAtual()).thenReturn(DataUtil.obterCalendar("07/10/2014"));
+		
 		Locacao locacao = locadora.alugarFilme(usuario, filmes);
 		
-		assertThat(locacao.getDataRetorno(), hojeComDiferencaDe(2, Calendar.DAY_OF_MONTH));
+		assertThat(locacao.getDataRetorno(), is(data("09/10/2014")));
 	}
 	
 	@Test
 	public void deveEntregarFilmeNaSegundaAoAlugar4FilmesNaSexta() throws Exception {
-		Assume.assumeTrue(Calendar.getInstance().get(Calendar.DAY_OF_WEEK) == Calendar.FRIDAY);
 		
 		//Cenario
 		Filme filme1 = new Filme("Iron Man", 2, 4.0);
@@ -170,9 +168,11 @@ public class LocadoraTest {
 		Filme filme4 = new Filme("The Avengers", 10, 5.0);
 		filmes = asList(filme1, filme2, filme3, filme4);
 		
+		Mockito.when(relogio.obterCalendarAtual()).thenReturn(DataUtil.obterCalendar("10/10/2014"));
+		
 		Locacao locacao = locadora.alugarFilme(usuario, filmes);
 		
-		assertThat(locacao.getDataRetorno(), is(hojeComDiferencaDias(3)));
+		assertThat(locacao.getDataRetorno(), is(data("13/10/2014")));
 	}
 	
 	@Test
@@ -201,6 +201,7 @@ public class LocadoraTest {
 		filmes = Arrays.asList(filme);
 		
 		Mockito.when(spcService.obterDebito(usuario)).thenReturn(false);
+		Mockito.when(relogio.obterCalendarAtual()).thenReturn(DataUtil.obterCalendar("07/10/2014"));
 		
 		//Acao
 		Locacao locacao = locadora.alugarFilme(usuario, filmes);
@@ -304,7 +305,5 @@ public class LocadoraTest {
 		assertThat(retorno.getFilmes(), hasSize(2));
 		assertThat(retorno.getFilmes(), hasItems(filme2, filme));
 		assertThat(retorno.getFilmes(), IsIterableContainingInOrder.contains(filme, filme2));
-		
-		System.out.println(retorno.getDataRetorno());
 	}
 }

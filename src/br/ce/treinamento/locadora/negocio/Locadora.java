@@ -14,6 +14,7 @@ public class Locadora {
 	private LocacaoDao locacaoDao;
 	private SPCService spcService;
 	private EmailService emailService;
+	private Relogio relogio;
 
 	public Locacao alugarFilme(Usuario usuario, List<Filme> filmes) throws Exception {
 		validarCamposObrigatorios(usuario, filmes);
@@ -27,8 +28,7 @@ public class Locadora {
 		locacao.setFilmes(filmes);
 		locacao.setUsuario(usuario);
 		
-		Calendar dataLocacao = Calendar.getInstance();
-//		dataLocacao.setTime(new Date());
+		Calendar dataLocacao = relogio.obterCalendarAtual();
 		locacao.setDataLocacao(dataLocacao.getTime());
 		locacao.setValor(calcularValorLocacao(filmes, dataLocacao));
 		locacao.setDataRetorno(calcularDataEntrega(filmes).getTime());
@@ -44,8 +44,7 @@ public class Locadora {
 
 	public /*final*/ Calendar calcularDataEntrega(List<Filme> filmes) {
 		//Entrega no dia seguinte, exceto quando o dia seguinte eh domingo... nesse caso, a entrega fica para segunda
-		Calendar dataEntrega = Calendar.getInstance();
-//		dataEntrega.setTime(new Date());
+		Calendar dataEntrega = relogio.obterCalendarAtual();
 		dataEntrega.add(Calendar.DAY_OF_MONTH, 1);
 		if(filmes.size() >= 4) {
 			dataEntrega.add(Calendar.DAY_OF_MONTH, 1);
@@ -53,7 +52,6 @@ public class Locadora {
 		if(dataEntrega.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
 			dataEntrega.add(Calendar.DAY_OF_MONTH, 1);
 		}
-		System.out.println("Entrou aqui");
 		return dataEntrega;
 	}
 
