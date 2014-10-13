@@ -3,6 +3,7 @@ package br.ce.treinamento.locadora.negocio;
 import static br.ce.treinamento.locadora.builders.FilmeBuilder.umFilme;
 import static br.ce.treinamento.locadora.builders.UsuarioBuilder.umUsuario;
 import static br.ce.treinamento.matchers.MatchersProprios.data;
+import static br.ce.treinamento.matchers.MatchersProprios.mesmoDiaQue;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -27,6 +28,7 @@ import br.ce.treinamento.locadora.dao.LocacaoDao;
 import br.ce.treinamento.locadora.entidades.Filme;
 import br.ce.treinamento.locadora.entidades.Locacao;
 import br.ce.treinamento.locadora.entidades.Usuario;
+import br.ce.treinamento.matchers.MatchersProprios;
 import br.ce.treinamento.util.DataUtil;
 
 @RunWith(PowerMockRunner.class)
@@ -46,6 +48,8 @@ public class LocadoraTestPowerMock {
 	@Before
 	public void setup(){
 		MockitoAnnotations.initMocks(this);
+		locadora = PowerMockito.spy(locadora);
+		
 	}
 	
 	@Test
@@ -84,5 +88,24 @@ public class LocadoraTestPowerMock {
 		
 		PowerMockito.verifyStatic(Mockito.times(2));
 		Calendar.getInstance();
+	}
+	
+	@Test
+	public void deveEntregarHojeAoMockarParaEntregarHoje() throws Exception{
+		//Cenario
+		Usuario usuario = umUsuario().criar();
+		List<Filme> filmes = Arrays.asList(umFilme().criar());
+		
+		PowerMockito.when(locadora.calcularDataEntrega(filmes)).thenReturn(Calendar.getInstance());
+		
+		//Acao
+		Locacao locacao = locadora.alugarFilme(usuario, filmes);
+		
+		//Verificacao
+		Calendar dataRetorno = Calendar.getInstance();
+		dataRetorno.setTime(locacao.getDataRetorno());
+		assertThat(dataRetorno, is(mesmoDiaQue(Calendar.getInstance())));
+		
+		Mockito.verify(locadora).calcularDataEntrega(filmes);
 	}
 }
