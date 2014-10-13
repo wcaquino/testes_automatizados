@@ -23,6 +23,7 @@ import org.mockito.MockitoAnnotations;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+import org.powermock.reflect.Whitebox;
 
 import br.ce.treinamento.locadora.dao.LocacaoDao;
 import br.ce.treinamento.locadora.entidades.Filme;
@@ -123,5 +124,15 @@ public class LocadoraTestPowerMock {
 		assertThat(locacao.getValor(), is(1.0));
 		
 		PowerMockito.verifyPrivate(locadora).invoke( "calcularValorLocacao", Mockito.any(List.class), Mockito.any(Calendar.class));
+	}
+	
+	@Test
+	public void deveCalcularOValorDaLocacaoConsiderandoTodosOsFilmes() throws Exception{
+		List<Filme> filmes = Arrays.asList(umFilme().criar());
+		Calendar calendar = Calendar.getInstance();
+		
+		Double valor = (Double) Whitebox.invokeMethod(locadora, "calcularValorLocacao", filmes, calendar);
+		
+		assertThat(valor, is(4.0));
 	}
 }
