@@ -28,7 +28,6 @@ import br.ce.treinamento.locadora.dao.LocacaoDao;
 import br.ce.treinamento.locadora.entidades.Filme;
 import br.ce.treinamento.locadora.entidades.Locacao;
 import br.ce.treinamento.locadora.entidades.Usuario;
-import br.ce.treinamento.matchers.MatchersProprios;
 import br.ce.treinamento.util.DataUtil;
 
 @RunWith(PowerMockRunner.class)
@@ -56,9 +55,9 @@ public class LocadoraTestPowerMock {
 	@Ignore
 	public void deveRetornarNaQuartaAoAlugarUmFilmeNaTerca() throws Exception{
 		//Cenario
-		PowerMockito.whenNew(Date.class).withNoArguments().thenReturn(DataUtil.obterData("07/10/2014"));
 		Usuario usuario = umUsuario().criar();
 		List<Filme> filmes = Arrays.asList(umFilme().criar());
+		PowerMockito.whenNew(Date.class).withNoArguments().thenReturn(DataUtil.obterData("07/10/2014"));
 		
 		//Acao
 		Locacao locacao = locadora.alugarFilme(usuario, filmes);
@@ -107,5 +106,22 @@ public class LocadoraTestPowerMock {
 		assertThat(dataRetorno, is(mesmoDiaQue(Calendar.getInstance())));
 		
 		Mockito.verify(locadora).calcularDataEntrega(filmes);
+	}
+	
+	@Test
+	public void deveRetornarOValorQueOPowerMockMandarRetornar() throws Exception{
+		//Cenario
+		Usuario usuario = umUsuario().criar();
+		List<Filme> filmes = Arrays.asList(umFilme().criar());
+		
+		PowerMockito.doReturn(1.0).when(locadora, "calcularValorLocacao", Mockito.any(List.class), Mockito.any(Calendar.class));
+		
+		//Acao
+		Locacao locacao = locadora.alugarFilme(usuario, filmes);
+		
+		//Verificacao
+		assertThat(locacao.getValor(), is(1.0));
+		
+		PowerMockito.verifyPrivate(locadora).invoke( "calcularValorLocacao", Mockito.any(List.class), Mockito.any(Calendar.class));
 	}
 }

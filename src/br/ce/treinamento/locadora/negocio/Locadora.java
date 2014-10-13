@@ -42,7 +42,7 @@ public class Locadora {
 		return locacao;
 	}
 
-	public final Calendar calcularDataEntrega(List<Filme> filmes) {
+	public /*final*/ Calendar calcularDataEntrega(List<Filme> filmes) {
 		//Entrega no dia seguinte, exceto quando o dia seguinte eh domingo... nesse caso, a entrega fica para segunda
 		Calendar dataEntrega = Calendar.getInstance();
 //		dataEntrega.setTime(new Date());
