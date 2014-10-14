@@ -11,9 +11,14 @@ public class UsuarioBuilder {
 	public static UsuarioBuilder umUsuario(){
 		UsuarioBuilder builder = new UsuarioBuilder();
 		builder.usuario = new Usuario("Jose");
-		builder.usuario.setCpf(123456L);
-		builder.usuario.setEmail("jose@email.com");
+		builder.usuario.setCpf(12345678L);
+		builder.usuario.setEmail("joseMaria@email.com");
 		return builder;
+	}
+	
+	public UsuarioBuilder comId(Long id) {
+		usuario.setId(id);
+		return this;
 	}
 	
 	public UsuarioBuilder comNome(String nome) {
