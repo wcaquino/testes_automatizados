@@ -54,8 +54,10 @@ public class FilmeDaoImpl implements FilmeDao {
 		PreparedStatement stmt = ConnectionFactory.getConnection().prepareStatement(builder.toString());
 		stmt.setLong(1, filmeId);
 		ResultSet rs = stmt.executeQuery();
-		rs.next();
+		if(!rs.next()) 
+			return null;
 		Filme filme = new Filme();
+		filme.setId(rs.getLong("id"));
 		filme.setNome(rs.getString("nome"));
 		filme.setEstoque(rs.getInt("estoque"));
 		filme.setPrecoLocacao(rs.getDouble("preco"));
@@ -80,6 +82,7 @@ public class FilmeDaoImpl implements FilmeDao {
 		List<Filme> lista = new ArrayList<Filme>();
 		while(rs.next()){
 			Filme filme = new Filme();
+			filme.setId(rs.getLong("id"));
 			filme.setNome(rs.getString("nome"));
 			filme.setEstoque(rs.getInt("estoque"));
 			filme.setPrecoLocacao(rs.getDouble("preco"));
@@ -88,4 +91,10 @@ public class FilmeDaoImpl implements FilmeDao {
 		return lista;
 	}
 
+	public void printAll() throws Exception{
+		List<Filme> filmes = listALL();
+		for(Filme filme: filmes) {
+			System.out.println(filme);
+		}
+	}
 }

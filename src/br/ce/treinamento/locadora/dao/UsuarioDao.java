@@ -4,15 +4,17 @@ import java.util.List;
 
 import br.ce.treinamento.locadora.entidades.Usuario;
 
-public interface UsuarioDao {
+interface UsuarioDao {
 
-    public Usuario save(Usuario Usuario) throws Exception;
+    Usuario save(Usuario Usuario) throws Exception;
  
-    public Usuario edit(Usuario Usuario) throws Exception;
+    Usuario edit(Usuario Usuario) throws Exception;
  
-    public Usuario find(Long UsuarioId) throws Exception;
+    Usuario find(Long UsuarioId) throws Exception;
  
-    public void remove(Usuario Usuario) throws Exception;
+    void remove(Usuario Usuario) throws Exception;
  
-    public List<Usuario> listALL() throws Exception;
+    List<Usuario> listALL() throws Exception;
+    
+    void printAll() throws Exception;
 }

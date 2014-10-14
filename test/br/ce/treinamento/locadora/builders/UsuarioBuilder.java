@@ -21,6 +21,16 @@ public class UsuarioBuilder {
 		return this;
 	}
 	
+	public UsuarioBuilder comEmail(String email) {
+		usuario.setEmail(email);
+		return this;
+	}
+	
+	public UsuarioBuilder comCpf(Long cpf) {
+		usuario.setCpf(cpf);
+		return this;
+	}
+	
 	public Usuario criar(){
 		return usuario;
 	}

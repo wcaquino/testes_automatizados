@@ -28,7 +28,7 @@ public class UsuarioDaoImpl implements UsuarioDao {
 		stmt.setLong(1, usuario.getCpf());
 		ResultSet rs = stmt.executeQuery();
 		rs.next();
-		usuario.setId(rs.getLong(1));
+		usuario.setId(rs.getLong("id"));
 		return usuario;
 	}
 
@@ -53,8 +53,10 @@ public class UsuarioDaoImpl implements UsuarioDao {
 		PreparedStatement stmt = ConnectionFactory.getConnection().prepareStatement(builder.toString());
 		stmt.setLong(1, usuarioId);
 		ResultSet rs = stmt.executeQuery();
-		rs.next();
+		if(!rs.next()) 
+			return null;
 		Usuario usuario = new Usuario();
+		usuario.setId(rs.getLong("id"));
 		usuario.setNome(rs.getString("nome"));
 		usuario.setEmail(rs.getString("email"));
 		usuario.setCpf(rs.getLong("cpf"));
@@ -79,11 +81,19 @@ public class UsuarioDaoImpl implements UsuarioDao {
 		List<Usuario> lista = new ArrayList<Usuario>();
 		while(rs.next()){
 			Usuario usuario = new Usuario();
+			usuario.setId(rs.getLong("id"));
 			usuario.setNome(rs.getString("nome"));
 			usuario.setEmail(rs.getString("email"));
 			usuario.setCpf(rs.getLong("cpf"));
 			lista.add(usuario);
 		}
 		return lista;
+	}
+	
+	public void printAll() throws Exception{
+		List<Usuario> usuarios = listALL();
+		for(Usuario usuario: usuarios) {
+			System.out.println(usuario);
+		}
 	}
 }
