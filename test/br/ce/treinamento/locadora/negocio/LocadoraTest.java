@@ -247,27 +247,31 @@ public class LocadoraTest {
 	}
 	
 	@Test
-	public void deveNotificarUsuariosComLocacoesAtrasadas(){
+	public void deveNotificarUsuariosComLocacoesAtrasadas() throws Exception{
+		Usuario jose = UsuarioBuilder.umUsuario().comNome("Jose").criar();
+		Usuario maria = UsuarioBuilder.umUsuario().comNome("Maria").criar();
+		Usuario josefa = UsuarioBuilder.umUsuario().comNome("Josefa").criar();
+		
 		Locacao locacao = LocacaoBuilder.umaLocacao()
-					.comUsuario(UsuarioBuilder.umUsuario().comNome("Jose").criar())
+					.comUsuario(jose)
 					.comDataLocacaoDiferencaHoje(-2)
 					.comDataRetornoDiferencaHoje(-1)
 				.criar(); 
 		
 		Locacao locacao2 = LocacaoBuilder.umaLocacao()
-				.comUsuario(UsuarioBuilder.umUsuario().comNome("Maria").criar())
+				.comUsuario(maria)
 				.comDataLocacaoDiferencaHoje(-3)
 				.comDataRetornoDiferencaHoje(-2)
 			.criar(); 
 
 		Locacao locacao3 = LocacaoBuilder.umaLocacao()
-				.comUsuario(UsuarioBuilder.umUsuario().comNome("Josefa").criar())
+				.comUsuario(josefa)
 				.comDataLocacaoDiferencaHoje(-1)
 				.comDataRetornoDiferencaHoje(1)
 			.criar(); 
 		
 		Locacao locacao4 = LocacaoBuilder.umaLocacao()
-				.comUsuario(UsuarioBuilder.umUsuario().comNome("Jose").criar())
+				.comUsuario(jose)
 				.comDataLocacaoDiferencaHoje(-4)
 				.comDataRetornoDiferencaHoje(-2)
 			.criar(); 
@@ -278,14 +282,14 @@ public class LocadoraTest {
 		
 		locadora.notificarAtrasados();
 		
-		Mockito.verify(emailService, times(2)).notificarAtraso(new Usuario("Jose"));
-		Mockito.verify(emailService).notificarAtraso(new Usuario("Maria"));
-		Mockito.verify(emailService, never()).notificarAtraso(new Usuario("Josefa"));
+		Mockito.verify(emailService, times(2)).notificarAtraso(jose);
+		Mockito.verify(emailService).notificarAtraso(maria);
+		Mockito.verify(emailService, never()).notificarAtraso(josefa);
 		
 	}
 	
 	@Test
-	public void deveCobrarZeroAoAlugarUsandoFidelidade() throws LocadoraException{
+	public void deveCobrarZeroAoAlugarUsandoFidelidade() throws Exception{
 		Filme filme = new Filme("Truque de mestre", 5, 4.0);
 		Filme filme2 = new Filme("The prestige", 0, 4.0);
 		filmes = Arrays.asList(filme, filme2);
@@ -297,7 +301,7 @@ public class LocadoraTest {
 		locadora.LiberarAluguelComFidelidade(usuario, filmes);
 		
 		ArgumentCaptor<Locacao> argCapt = ArgumentCaptor.forClass(Locacao.class);
-		Mockito.verify(locacaoDao).salvar(argCapt.capture());
+		Mockito.verify(locacaoDao).save(argCapt.capture());
 		Locacao retorno = argCapt.getValue();
 		
 		assertThat(retorno.getUsuario(), is(usuario));

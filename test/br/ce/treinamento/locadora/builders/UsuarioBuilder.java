@@ -11,6 +11,8 @@ public class UsuarioBuilder {
 	public static UsuarioBuilder umUsuario(){
 		UsuarioBuilder builder = new UsuarioBuilder();
 		builder.usuario = new Usuario("Jose");
+		builder.usuario.setCpf(123456L);
+		builder.usuario.setEmail("jose@email.com");
 		return builder;
 	}
 	

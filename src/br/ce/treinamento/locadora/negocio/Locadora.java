@@ -37,7 +37,7 @@ public class Locadora {
 			filme.setEstoque(filme.getEstoque() - 1);
 		}
 		
-		locacaoDao.salvar(locacao);
+		locacaoDao.save(locacao);
 		
 		return locacao;
 	}
@@ -92,7 +92,7 @@ public class Locadora {
 		return valorLocacao;
 	}
 
-	public void notificarAtrasados() {
+	public void notificarAtrasados() throws Exception {
 		List<Locacao> locacoes = locacaoDao.obterLocacoesPendentes();
 		Calendar dataAtual = Calendar.getInstance();
 		for(Locacao locacao: locacoes) {
@@ -102,7 +102,7 @@ public class Locadora {
 		}
 	}
 
-	public void LiberarAluguelComFidelidade(Usuario usuario, List<Filme> filmes) throws LocadoraException {
+	public void LiberarAluguelComFidelidade(Usuario usuario, List<Filme> filmes) throws Exception {
 		validarCamposObrigatorios(usuario, filmes);
 		
 		Locacao locacao = new Locacao();
@@ -111,6 +111,6 @@ public class Locadora {
 		locacao.setValor(0d);
 		locacao.setDataLocacao(Calendar.getInstance().getTime());
 		locacao.setDataRetorno(calcularDataEntrega(filmes).getTime());
-		locacaoDao.salvar(locacao);
+		locacaoDao.save(locacao);
 	}
 }

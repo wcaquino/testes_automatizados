@@ -2,6 +2,7 @@ package br.ce.treinamento.locadora.entidades;
 
 public class Filme {
 
+	private Long id;
 	private String nome;
 	private Integer estoque;
 	private Double precoLocacao;
@@ -10,6 +11,9 @@ public class Filme {
 		this.nome = nome;
 		this.estoque = estoque;
 		this.precoLocacao = precoLocacao;
+	}
+	
+	public Filme() {
 	}
 	
 	public String getNome() {
@@ -29,5 +33,13 @@ public class Filme {
 	}
 	public void setPrecoLocacao(Double precoLocacao) {
 		this.precoLocacao = precoLocacao;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 }
