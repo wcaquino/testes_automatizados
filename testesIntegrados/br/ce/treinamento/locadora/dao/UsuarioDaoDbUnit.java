@@ -11,16 +11,21 @@ import static org.junit.Assert.assertThat;
 import java.io.FileInputStream;
 import java.util.List;
 
+import org.dbunit.Assertion;
 import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;
+import org.dbunit.dataset.ITable;
+import org.dbunit.dataset.xml.FlatXmlDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
+import org.dbunit.dataset.xml.FlatXmlProducer;
 import org.dbunit.ext.hsqldb.HsqldbDataTypeFactory;
 import org.dbunit.operation.DatabaseOperation;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.xml.sax.InputSource;
 
 import br.ce.treinamento.locadora.conn.ConnectionFactory;
 import br.ce.treinamento.locadora.entidades.Usuario;
@@ -83,5 +88,39 @@ public class UsuarioDaoDbUnit {
 		
 		assertThat(usuarios, hasSize(2));
 		assertThat(usuarios, hasItems(usuario));
+	}
+	
+	@Test
+	public void testAlterarComparandoXML() throws Exception{
+		Usuario usuario = umUsuario().comId(2L).comNome("Joaquim").comEmail("joaquim@email.com").comCpf(112233L).criar();
+		
+		usuarioDao.edit(usuario);
+		
+		//Expectativa
+		IDataSet dadosEsperados = new FlatXmlDataSet(new FlatXmlProducer(new InputSource("baseEsperadaAlteracao.xml")));
+		ITable tabelaEsperada = dadosEsperados.getTable("usuario");
+		
+		//Banco
+		IDataSet dadosBanco = getConnection().createDataSet();
+		ITable tabelaBanco = dadosBanco.getTable("usuario");
+		
+		Assertion.assertEquals(tabelaEsperada, tabelaBanco);
+	}
+	
+	@Test
+	public void testExcluirComparandoXML() throws Exception{
+		Usuario usuario = umUsuario().comId(1L).criar();
+		
+		usuarioDao.remove(usuario);
+		
+		//Expectativa
+		IDataSet dadosEsperados = new FlatXmlDataSet(new FlatXmlProducer(new InputSource("baseEsperadaExclusao.xml")));
+		ITable tabelaEsperada = dadosEsperados.getTable("usuario");
+		
+		//Banco
+		IDataSet dadosBanco = getConnection().createDataSet();
+		ITable tabelaBanco = dadosBanco.getTable("usuario");
+		
+		Assertion.assertEquals(tabelaEsperada, tabelaBanco);
 	}
 }
