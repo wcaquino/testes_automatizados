@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<filme id="1" nome="Senhor dos aneis" estoque="1" preco="2.0"/>
+	<filme id="2" nome="Matrix" estoque="1" preco="2.0"/>
+	
+	<usuario id="1" nome="Jose" email="jose@email.com" cpf="123456"/>
+	
+	<locacao id="1" id_usuario="1" data_locacao="2diasAtras" data_retorno="ontem" valor="4.0" status="0"/>
+	<locacao id="2" id_usuario="1" data_locacao="hoje" data_retorno="amanha" valor="4.0" status="0"/>
+	<filmes_locacao id_locacao="1" id_filme="1"/>
+	<filmes_locacao id_locacao="2" id_filme="2"/>
+</dataset>

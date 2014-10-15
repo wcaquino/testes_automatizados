@@ -2,6 +2,6 @@
 <dataset>
 	<filme id="1" nome="filme" estoque="1" preco="2.0"/>
 	<usuario id="1" nome="Jose" email="jose@email.com" cpf="123456"/>
-	<locacao id="8" id_usuario="1" data_locacao="2014-10-15" data_retorno="2014-10-16" valor="4.0" status="0"/>
+	<locacao id="8" id_usuario="1" data_locacao="hoje" data_retorno="amanha" valor="4.0" status="0"/>
 	<filmes_locacao id_locacao="8" id_filme="1"/>
 </dataset>

@@ -65,8 +65,11 @@ public class LocacaoDaoImpl implements LocacaoDao{
 		locacao.setDataRetorno(rs.getDate("data_retorno"));
 		locacao.setValor(rs.getDouble("valor"));
 		locacao.setStatus(rs.getInt("status"));
+		rs.close();
+		stmt.close();
 		
 		List<Filme> filmes = new ArrayList<Filme>();
+		builder = new StringBuilder();
 		builder.append("SELECT * FROM filmes_locacao WHERE id_locacao = ?");
 		stmt = ConnectionFactory.getConnection().prepareStatement(builder.toString());
 		stmt.setLong(1, locacaoId);
@@ -87,6 +90,7 @@ public class LocacaoDaoImpl implements LocacaoDao{
 		stmt.setLong(1, locacao.getId());
 		stmt.executeUpdate();
 
+		builder = new StringBuilder();
 		builder.append("DELETE FROM locacao WHERE ID = ?");
 		stmt = ConnectionFactory.getConnection().prepareStatement(builder.toString());
 		stmt.setLong(1, locacao.getId());

@@ -5,7 +5,6 @@ import static br.ce.treinamento.locadora.builders.UsuarioBuilder.umUsuario;
 
 import java.io.FileInputStream;
 import java.util.Arrays;
-import java.util.Calendar;
 
 import org.dbunit.Assertion;
 import org.dbunit.database.DatabaseConfig;
@@ -13,7 +12,6 @@ import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.ITable;
-import org.dbunit.dataset.ReplacementDataSet;
 import org.dbunit.dataset.filter.DefaultColumnFilter;
 import org.dbunit.dataset.xml.FlatXmlDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
@@ -25,7 +23,7 @@ import org.junit.Test;
 import org.xml.sax.InputSource;
 
 import br.ce.treinamento.locadora.conn.ConnectionFactory;
-import br.ce.treinamento.util.DataUtil;
+import br.ce.treinamento.locadora.utils.ReplacementUtils;
 
 public class LocadoraTestIntegrado {
 
@@ -53,10 +51,14 @@ public class LocadoraTestIntegrado {
 		
 		//Expectativa
 		IDataSet dadosEsperados = new FlatXmlDataSet(new FlatXmlProducer(new InputSource("baseEsperadaAlugarFilme.xml")));
-		ITable tabelaLocacaoEsperada = dadosEsperados.getTable("locacao");
+		
+		IDataSet dadosEsperadosReplaced = ReplacementUtils.obterReplacementDeDatas(dadosEsperados);
+		
+		ITable tabelaLocacaoEsperada = dadosEsperadosReplaced.getTable("locacao");
 		ITable tabelaLocacaoEsperadaFiltrada = DefaultColumnFilter.excludedColumnsTable(tabelaLocacaoEsperada, new String[] {"id"});
 		ITable tabelaFilmesLocacaoEsperada = dadosEsperados.getTable("filmes_locacao");
 		ITable tabelaFilmesLocacaoEsperadaFiltrada = DefaultColumnFilter.excludedColumnsTable(tabelaFilmesLocacaoEsperada, new String[] {"id_locacao"});
+		
 		
 		//Banco
 		IDataSet dadosBanco = getConnection().createDataSet();
