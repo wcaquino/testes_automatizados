@@ -5,11 +5,13 @@ import java.util.List;
 
 public class Locacao {
 
+	private Long id;
 	private Usuario usuario;
 	private List<Filme> filmes;
 	private Date dataLocacao;
 	private Date dataRetorno;
 	private Double valor;
+	private Integer status;
 	
 	public Locacao() {
 		valor = 0d;
@@ -44,5 +46,21 @@ public class Locacao {
 	}
 	public void setValor(Double valor) {
 		this.valor = valor;
+	}
+
+	public Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 }

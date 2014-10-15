@@ -3,7 +3,10 @@ package br.ce.treinamento.locadora.negocio;
 import java.util.Calendar;
 import java.util.List;
 
+import org.mockito.Mockito;
+
 import br.ce.treinamento.locadora.dao.LocacaoDao;
+import br.ce.treinamento.locadora.dao.LocacaoDaoImpl;
 import br.ce.treinamento.locadora.entidades.Filme;
 import br.ce.treinamento.locadora.entidades.Locacao;
 import br.ce.treinamento.locadora.entidades.Usuario;
@@ -11,18 +14,18 @@ import br.ce.treinamento.locadora.exceptions.LocadoraException;
 
 public class Locadora {
 	
-	private LocacaoDao locacaoDao;
+	private LocacaoDao locacaoDao = new LocacaoDaoImpl();
 	private SPCService spcService;
 	private EmailService emailService;
-	private Relogio relogio;
-
+	private Relogio relogio = new Relogio();
+	
 	public Locacao alugarFilme(Usuario usuario, List<Filme> filmes) throws Exception {
 		validarCamposObrigatorios(usuario, filmes);
 		
 		
-		if(spcService.obterDebito(usuario)) {
-			throw new LocadoraException("Usuario com pendencia no SPC");
-		}
+//		if(spcService.obterDebito(usuario)) {
+//			throw new LocadoraException("Usuario com pendencia no SPC");
+//		}
 		
 		Locacao locacao = new Locacao();
 		locacao.setFilmes(filmes);
@@ -32,6 +35,7 @@ public class Locadora {
 		locacao.setDataLocacao(dataLocacao.getTime());
 		locacao.setValor(calcularValorLocacao(filmes, dataLocacao));
 		locacao.setDataRetorno(calcularDataEntrega(filmes).getTime());
+		locacao.setStatus(0);
 		
 		for(Filme filme: filmes) {
 			filme.setEstoque(filme.getEstoque() - 1);

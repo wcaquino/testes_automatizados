@@ -6,9 +6,9 @@ import br.ce.treinamento.locadora.entidades.Locacao;
 
 public interface LocacaoDao {
 
-	public Locacao save(Locacao locacao) throws Exception;
+	public void save(Locacao locacao) throws Exception;
 	 
-    public Locacao edit(Locacao locacao) throws Exception;
+    public void edit(Locacao locacao) throws Exception;
  
     public Locacao find(Long locacaoId) throws Exception;
  
@@ -17,4 +17,6 @@ public interface LocacaoDao {
     public List<Locacao> listALL() throws Exception;
 
     public List<Locacao> obterLocacoesPendentes() throws Exception;
+
+	List<Locacao> obterLocacoesAtrasados() throws Exception;
 }

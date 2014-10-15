@@ -10,7 +10,12 @@ public class FilmeBuilder {
 	
 	public static FilmeBuilder umFilme(){
 		FilmeBuilder builder = new FilmeBuilder();
-		builder.filme = new Filme("Senhor dos aneis", 10, 4.0);
+		builder.filme = new Filme();
+		builder.filme.setId(1L);
+		builder.filme.setNome("Senhor dos aneis");
+		builder.filme.setPrecoLocacao(4d);
+		builder.filme.setEstoque(5);
+		
 		return builder;
 	}
 	
