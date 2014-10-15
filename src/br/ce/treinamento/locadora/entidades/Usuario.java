@@ -49,10 +49,16 @@ public class Usuario {
 	}
 
 	@Override
+	public String toString() {
+		return "Usuario [id=" + id + ", nome=" + nome + ", email=" + email
+				+ ", cpf=" + cpf + "]";
+	}
+
+	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + (int) (cpf ^ (cpf >>> 32));
+		result = prime * result + ((cpf == null) ? 0 : cpf.hashCode());
 		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
 		return result;
@@ -67,7 +73,10 @@ public class Usuario {
 		if (getClass() != obj.getClass())
 			return false;
 		Usuario other = (Usuario) obj;
-		if (cpf != other.cpf)
+		if (cpf == null) {
+			if (other.cpf != null)
+				return false;
+		} else if (!cpf.equals(other.cpf))
 			return false;
 		if (email == null) {
 			if (other.email != null)
@@ -80,11 +89,5 @@ public class Usuario {
 		} else if (!nome.equals(other.nome))
 			return false;
 		return true;
-	}
-
-	@Override
-	public String toString() {
-		return "Usuario [id=" + id + ", nome=" + nome + ", email=" + email
-				+ ", cpf=" + cpf + "]";
 	}
 }
