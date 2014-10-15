@@ -67,6 +67,6 @@ public class UsuarioDaoTest {
 	public void deve4ListarUsuarios() throws Exception{
 		List<Usuario> usuarios = usuarioDao.listALL();
 		
-		assertThat(usuarios, hasSize(greaterThan(6)));
+		assertThat(usuarios, hasSize(greaterThan(2)));
 	}
 }

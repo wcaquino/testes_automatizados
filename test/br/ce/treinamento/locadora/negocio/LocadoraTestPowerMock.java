@@ -69,6 +69,7 @@ public class LocadoraTestPowerMock {
 	}
 	
 	@Test
+	@Ignore
 	public void deveRetornarNaSegundaAoAlugarQuatriFilmesNaSexta() throws Exception{
 		//Cenario
 		Calendar calendar = Calendar.getInstance();
@@ -91,6 +92,7 @@ public class LocadoraTestPowerMock {
 	}
 	
 	@Test
+	@Ignore
 	public void deveEntregarHojeAoMockarParaEntregarHoje() throws Exception{
 		//Cenario
 		Usuario usuario = umUsuario().criar();
@@ -110,6 +112,7 @@ public class LocadoraTestPowerMock {
 	}
 	
 	@Test
+	@Ignore
 	public void deveRetornarOValorQueOPowerMockMandarRetornar() throws Exception{
 		//Cenario
 		Usuario usuario = umUsuario().criar();

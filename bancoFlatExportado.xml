@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+  <FILME/>
+  <FILMES_LOCACAO/>
+  <LOCACAO/>
+  <USUARIO ID="1" NOME="Jose" EMAIL="jose@email.com" CPF="123456"/>
+  <USUARIO ID="2" NOME="Maria" EMAIL="maria@email.com" CPF="654321"/>
+  <USUARIO ID="72" NOME="Jose" EMAIL="joseMaria@email.com" CPF="12345678"/>
+  <USUARIO ID="73" NOME="Jose" EMAIL="1413335729644@email.com" CPF="1413335729644"/>
+  <USUARIO ID="74" NOME="Jose" EMAIL="1413335729646@email.com" CPF="1413335729648"/>
+  <USUARIO ID="76" NOME="Jose" EMAIL="1413335755554@email.com" CPF="1413335755554"/>
+  <USUARIO ID="77" NOME="Jose" EMAIL="1413335756100@email.com" CPF="1413335756102"/>
+</dataset>
